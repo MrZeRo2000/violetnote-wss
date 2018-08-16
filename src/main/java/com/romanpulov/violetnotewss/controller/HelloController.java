@@ -12,10 +12,13 @@ import javax.servlet.ServletContext;
 @RestController
 public class HelloController {
 
-    @Autowired
-    ServletContext context;
+    private ServletContext context;
 
-    @RequestMapping("/")
+    public HelloController(@Autowired ServletContext context) {
+        this.context = context;
+    }
+
+    @RequestMapping(path = "/", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
     public String index() {
         return "Hello";
     }
