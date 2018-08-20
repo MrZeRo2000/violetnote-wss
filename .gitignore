@@ -4,3 +4,8 @@ target/
 # idea files
 .idea/
 *.iml
+
+# gradle
+.gradle/
+gradle/
+build/
