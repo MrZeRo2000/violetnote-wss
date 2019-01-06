@@ -24,4 +24,3 @@ dependencies {
     providedCompile group: 'org.springframework.boot', name: 'spring-boot-starter-tomcat', version:'2.0.3.RELEASE'
     providedCompile group: 'javax.servlet', name: 'javax.servlet-api', version:'3.0.1'
 }
-
