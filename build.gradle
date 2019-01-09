@@ -1,3 +1,4 @@
+
 apply plugin: 'java'
 apply plugin: 'war'
 
@@ -12,15 +13,20 @@ tasks.withType(JavaCompile) {
 	options.encoding = 'UTF-8'
 }
               
-repositories {        
-  jcenter()
+repositories {
+    jcenter()
 }
 
 dependencies {
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version:'2.0.3.RELEASE'
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version:'2.0.3.RELEASE'
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version:'2.9.6'
-    testCompile group: 'junit', name: 'junit', version:'3.8.1'
     providedCompile group: 'org.springframework.boot', name: 'spring-boot-starter-tomcat', version:'2.0.3.RELEASE'
     providedCompile group: 'javax.servlet', name: 'javax.servlet-api', version:'3.0.1'
+    testCompile 'junit:junit:4.12'
+    testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version:'2.0.3.RELEASE'
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '4.9'
 }

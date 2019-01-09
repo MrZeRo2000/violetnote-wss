@@ -20,7 +20,7 @@ public class HelloController {
 
     @RequestMapping(path = "/", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
     public String index() {
-        return "Hello";
+        return "Hello from HelloController";
     }
 
     @RequestMapping("/filename")
