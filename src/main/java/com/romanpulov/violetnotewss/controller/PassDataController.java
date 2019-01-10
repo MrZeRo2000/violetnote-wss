@@ -13,12 +13,22 @@ import java.io.FileNotFoundException;
 @RestController("passdata")
 public class PassDataController {
 
-    @RequestMapping(path = "checkpassword" ,consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.PUT)
+    @RequestMapping(
+            path = "checkpassword" ,
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            method = RequestMethod.PUT
+    )
     public String checkPassword(@RequestBody PassDataAuthInfo passDataAuthInfo) {
         return passDataAuthInfo.password;
     }
 
-    @RequestMapping(path = "checkpassword1" ,consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.TEXT_HTML_VALUE, method = RequestMethod.PUT)
+    @RequestMapping(
+            path = "checkpassword1" ,
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.TEXT_HTML_VALUE,
+            method = RequestMethod.PUT
+    )
     public String checkPassword1(@RequestBody String json) {
         ObjectMapper mapper = new ObjectMapper();
         try {
@@ -29,12 +39,22 @@ public class PassDataController {
         }
     }
 
-    @RequestMapping(path = "checkpasswordpost" ,consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.POST)
+    @RequestMapping(
+            path = "checkpasswordpost" ,
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            method = RequestMethod.POST
+    )
     public String checkPasswordPost(@RequestBody PassDataAuthInfo passDataAuthInfo) {
         return passDataAuthInfo.password;
     }
 
-    @RequestMapping(path = "checkpasswordpostex" ,consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.POST)
+    @RequestMapping(
+            path = "checkpasswordpostex" ,
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            method = RequestMethod.POST
+    )
     public String checkPasswordPostEx(@RequestBody PassDataAuthInfo passDataAuthInfo) throws FileNotFoundException {
         throw new FileNotFoundException("file not found");
     }

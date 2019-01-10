@@ -2,6 +2,10 @@
 apply plugin: 'java'
 apply plugin: 'war'
 
+war {
+    archiveName = 'violetnote-wss.war'
+}
+
 group = 'com.romanpulov'
 version = '1.0-SNAPSHOT'
 
@@ -22,11 +26,18 @@ dependencies {
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version:'2.0.3.RELEASE'
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version:'2.9.6'
     providedCompile group: 'org.springframework.boot', name: 'spring-boot-starter-tomcat', version:'2.0.3.RELEASE'
-    providedCompile group: 'javax.servlet', name: 'javax.servlet-api', version:'3.0.1'
     testCompile 'junit:junit:4.12'
     testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version:'2.0.3.RELEASE'
 }
 
-task wrapper(type: Wrapper) {
-    gradleVersion = '4.9'
+def tomcat_home='D:/prj/apache-tomcat-8.0.30'
+def tomcat_webapps = tomcat_home + '/webapps'
+
+tasks.register("deploy") {
+    dependsOn 'war'
+    copy {
+        from "build/libs"
+        into tomcat_webapps
+        include "*.war"
+    }
 }
