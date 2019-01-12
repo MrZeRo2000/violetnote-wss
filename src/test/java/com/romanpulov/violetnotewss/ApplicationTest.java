@@ -17,6 +17,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.servlet.ServletContext;
@@ -24,6 +25,7 @@ import javax.servlet.ServletContext;
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @ContextConfiguration(classes={Application.class})
+@TestPropertySource(properties = "server.servlet.context-parameters.fileName=\"Test property source file name\"")
 public class ApplicationTest {
 
     @LocalServerPort
@@ -73,5 +75,6 @@ public class ApplicationTest {
     @Test
     public void initParameter() {
         System.out.println("FileName:" + context.getInitParameter("fileName"));
+        System.out.println("From controller:" + this.restTemplate.getForObject("http://localhost:" + port + "/filename", String.class));
     }
 }
