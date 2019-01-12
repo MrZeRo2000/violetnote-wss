@@ -69,4 +69,9 @@ public class ApplicationTest {
 
         assertThat(answer).isEqualTo("pass123");
     }
+
+    @Test
+    public void initParameter() {
+        System.out.println("FileName:" + context.getInitParameter("fileName"));
+    }
 }
