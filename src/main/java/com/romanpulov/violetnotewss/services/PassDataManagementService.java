@@ -19,15 +19,8 @@ public class PassDataManagementService {
 
     private ServletContext context;
 
-    /*
     public PassDataManagementService(@Autowired ServletContext context) {
         this.context = context;
-    }
-    */
-
-    @Autowired(required = true)
-    public void setContext(ServletContext value) {
-        this.context = value;
     }
 
     public String getPassDataFileName() {
