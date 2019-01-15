@@ -7,7 +7,7 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-@ComponentScan(basePackages = "com.romanpulov.violetnotewss.controller")
+@ComponentScan(basePackages = {"com.romanpulov.violetnotewss.controller", "com.romanpulov.violetnotewss.services"})
 public class Application extends SpringBootServletInitializer {
 
     @Override

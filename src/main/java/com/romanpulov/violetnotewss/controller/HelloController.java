@@ -13,12 +13,6 @@ import java.io.File;
 @RestController
 public class HelloController {
 
-    private ServletContext context;
-
-    public HelloController(@Autowired ServletContext context) {
-        this.context = context;
-    }
-
     @RequestMapping(path = "/", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
     public String index() {
         return "Hello from HelloController";

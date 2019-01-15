@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.romanpulov.violetnotewss.application.Application;
 import com.romanpulov.violetnotewss.controller.PassDataController;
+import com.romanpulov.violetnotewss.services.PassDataManagementService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,9 +40,16 @@ public class ApplicationTest {
     @Autowired
     private ServletContext context;
 
+    @Autowired
+    private PassDataManagementService passDataManagementService;
+
     @Test
     public void contextLoads() throws Exception {
         assertThat(context).isNotNull();
+    }
+
+    public void serviceLoads() throws Exception {
+        assertThat(passDataManagementService).isNotNull();
     }
 
     @Test
@@ -75,7 +83,7 @@ public class ApplicationTest {
 
     @Test
     public void fileName() {
-        assertThat(context.getInitParameter(PassDataController.PASS_DATA_FILE_NAME_PARAM_NAME)).isEqualTo("data/test1.vnf");
+        assertThat(context.getInitParameter(PassDataManagementService.PASS_DATA_FILE_NAME_PARAM_NAME)).isEqualTo("data/test1.vnf");
         String fileNameResult = this.restTemplate.getForObject("http://localhost:" + port + "/filename", String.class);
         assertThat(fileNameResult).contains("file exists:true");
     }
