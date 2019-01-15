@@ -3,15 +3,32 @@ package com.romanpulov.violetnotewss.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.romanpulov.violetnotewss.model.ErrorResponse;
 import com.romanpulov.violetnotewss.model.PassDataAuthInfo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.ServletContext;
+import java.io.File;
 import java.io.FileNotFoundException;
 
 @RestController("passdata")
 public class PassDataController {
+    public final static String PASS_DATA_FILE_NAME_PARAM_NAME = "pass-data-file-name";
+
+    private ServletContext context;
+
+    public PassDataController(@Autowired ServletContext context) {
+        this.context = context;
+    }
+
+    @RequestMapping("/filename")
+    public String getFileName() {
+        String fileName = context.getInitParameter(PASS_DATA_FILE_NAME_PARAM_NAME);
+        File f = new File(fileName);
+        return "FileName:" + fileName + ", file exists:" + f.exists();
+    }
 
     @RequestMapping(
             path = "checkpassword" ,

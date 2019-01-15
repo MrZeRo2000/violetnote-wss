@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.ServletContext;
+import java.io.File;
 
 @RestController
 public class HelloController {
@@ -21,11 +22,6 @@ public class HelloController {
     @RequestMapping(path = "/", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
     public String index() {
         return "Hello from HelloController";
-    }
-
-    @RequestMapping("/filename")
-    public String getFileName() {
-        return context.getInitParameter("fileName");
     }
 
     @RequestMapping(value = "/dataitem", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
