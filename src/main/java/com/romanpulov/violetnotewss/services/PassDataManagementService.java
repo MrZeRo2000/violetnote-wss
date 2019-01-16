@@ -12,6 +12,9 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.ServletContext;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 @Service
 public class PassDataManagementService {
@@ -26,11 +29,14 @@ public class PassDataManagementService {
     public String getPassDataFileName() {
         return context.getInitParameter(PassDataManagementService.PASS_DATA_FILE_NAME_PARAM_NAME);
     }
-    public PassData readPassData(PassDataInfo passDataInfo) throws PassDataFileNotFoundException, PassDataFileReadException {
+
+    public PassData readPassData(PassDataInfo passDataInfo)
+            throws PassDataFileNotFoundException, PassDataFileReadException {
         return readPassData(passDataInfo, getPassDataFileName());
     }
 
-    public PassData readPassData(PassDataInfo passDataInfo, String fileName) throws PassDataFileNotFoundException, PassDataFileReadException {
+    public PassData readPassData(PassDataInfo passDataInfo, String fileName)
+            throws PassDataFileNotFoundException, PassDataFileReadException {
 
         if (fileName == null) {
             throw new PassDataFileNotFoundException();
@@ -41,8 +47,18 @@ public class PassDataManagementService {
             throw new PassDataFileNotFoundException(fileName);
         }
 
+        if ((passDataInfo == null) || (passDataInfo.isEmptyPassword())) {
+            throw new PassDataFileReadException("No password");
+        }
 
-
-        return null;
+        try (InputStream input = AESCryptService.generateCryptInputStream(new FileInputStream(file), passDataInfo.password)) {
+            return (new XMLPassDataReader()).readStream(input);
+        } catch (AESCryptException | IOException | DataReadWriteException e) {
+            e.printStackTrace();
+            if (e instanceof IOException) {
+                throw new PassDataFileReadException("Data file read error: " + e.getMessage());
+            } else
+                throw new PassDataFileReadException("Data decryption error: " + e.getMessage());
+        }
     }
 }

@@ -10,6 +10,7 @@ import com.romanpulov.violetnotewss.services.PassDataManagementService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -42,6 +43,9 @@ public class ApplicationTest {
 
     @Autowired
     private PassDataManagementService passDataManagementService;
+
+    @Value("${server.servlet.context-parameters.pass-data-file-name}")
+    private String passDataFileName;
 
     @Test
     public void contextLoads() throws Exception {
