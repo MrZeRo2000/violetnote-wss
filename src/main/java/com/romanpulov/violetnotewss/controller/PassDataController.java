@@ -1,8 +1,11 @@
 package com.romanpulov.violetnotewss.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.romanpulov.violetnotecore.Model.PassData;
 import com.romanpulov.violetnotewss.model.ErrorResponse;
 import com.romanpulov.violetnotewss.model.PassDataInfo;
+import com.romanpulov.violetnotewss.services.PassDataFileNotFoundException;
+import com.romanpulov.violetnotewss.services.PassDataFileReadException;
 import com.romanpulov.violetnotewss.services.PassDataManagementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -71,12 +74,24 @@ public class PassDataController {
             produces = MediaType.APPLICATION_JSON_VALUE,
             method = RequestMethod.POST
     )
-    public String checkPasswordPostEx(@RequestBody PassDataInfo passDataInfo) throws FileNotFoundException {
-        throw new FileNotFoundException("file not found");
+    public String checkPasswordPostEx(@RequestBody PassDataInfo passDataInfo) throws PassDataFileNotFoundException {
+        throw new PassDataFileNotFoundException("file not found");
     }
 
-    @ExceptionHandler(FileNotFoundException.class)
-    public ResponseEntity<ErrorResponse> exceptionHandler(FileNotFoundException ex) {
+    @RequestMapping(
+            path = "readdatapost" ,
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            method = RequestMethod.POST
+    )
+    public PassData readDataPost(@RequestBody PassDataInfo passDataInfo)
+        throws PassDataFileNotFoundException, PassDataFileReadException
+    {
+        return passDataManagementService.readPassData(passDataInfo);
+    }
+
+    @ExceptionHandler({PassDataFileNotFoundException.class, PassDataFileReadException.class})
+    public ResponseEntity<ErrorResponse> exceptionHandler(Exception ex) {
         ErrorResponse error = new ErrorResponse();
         error.setErrorCode(HttpStatus.NOT_FOUND.value());
         error.setMessage(ex.getMessage());

@@ -15,13 +15,15 @@ import org.springframework.mock.web.MockServletContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import javax.servlet.ServletContext;
 import java.io.File;
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = {PassDataManagementService.class, MockServletContext.class})
 public class ServicesTest {
     private static final String PASS_DATA_FILE_NAME = "data/test1.vnf";
+    private static final String PASS_DATA_PASSWORD = "123456";
+    private static final String PASS_DATA_WRONG_PASSWORD = "wrong_password";
+    private static final String PASS_DATA_WRONG_FILE_NAME = "wrong_file_name";
 
     private File passDataFile;
 
@@ -48,7 +50,7 @@ public class ServicesTest {
 
     @Test(expected = PassDataFileNotFoundException.class)
     public void readPassDataFileNotFound() throws Exception {
-        passDataManagementService.readPassData(null, "any_non_existing_file");
+        passDataManagementService.readPassData(null, PASS_DATA_WRONG_FILE_NAME);
     }
 
     @Test(expected = PassDataFileReadException.class)
@@ -64,7 +66,7 @@ public class ServicesTest {
     @Test(expected = PassDataFileReadException.class)
     public void readPassDataFileReadWrongPassword() throws Exception {
         passDataManagementService.readPassData(
-                PassDataInfo.fromString("wrong_password"),
+                PassDataInfo.fromString(PASS_DATA_WRONG_PASSWORD),
                 passDataFile.getAbsolutePath()
         );
     }
@@ -72,7 +74,7 @@ public class ServicesTest {
     @Test
     public void readPassData() throws Exception {
         PassData passData = passDataManagementService.readPassData(
-                PassDataInfo.fromString("123456"),
+                PassDataInfo.fromString(PASS_DATA_PASSWORD),
                 passDataFile.getAbsolutePath()
         );
 
