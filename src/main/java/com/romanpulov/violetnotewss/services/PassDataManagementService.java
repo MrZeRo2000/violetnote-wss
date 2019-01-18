@@ -20,7 +20,7 @@ import java.io.InputStream;
 public class PassDataManagementService {
     public final static String PASS_DATA_FILE_NAME_PARAM_NAME = "pass-data-file-name";
 
-    private ServletContext context;
+    private final ServletContext context;
 
     public PassDataManagementService(@Autowired ServletContext context) {
         this.context = context;

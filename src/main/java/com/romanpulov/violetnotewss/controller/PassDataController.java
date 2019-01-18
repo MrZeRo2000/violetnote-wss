@@ -1,6 +1,5 @@
 package com.romanpulov.violetnotewss.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.romanpulov.violetnotecore.Model.PassData;
 import com.romanpulov.violetnotewss.model.ErrorResponse;
 import com.romanpulov.violetnotewss.model.PassDataInfo;
@@ -14,12 +13,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 
-@RestController("passdata")
+@RestController
+@RequestMapping("/passdata")
 public class PassDataController {
 
-    private PassDataManagementService passDataManagementService;
+    private final PassDataManagementService passDataManagementService;
 
     public PassDataController(@Autowired PassDataManagementService passDataManagementService) {
         this.passDataManagementService = passDataManagementService;
@@ -33,7 +32,7 @@ public class PassDataController {
     }
 
     @RequestMapping(
-            path = "checkpassword" ,
+            path = "/checkpassword" ,
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE,
             method = RequestMethod.PUT
@@ -43,23 +42,7 @@ public class PassDataController {
     }
 
     @RequestMapping(
-            path = "checkpassword1" ,
-            consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.TEXT_HTML_VALUE,
-            method = RequestMethod.PUT
-    )
-    public String checkPassword1(@RequestBody String json) {
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            PassDataInfo passDataInfo = mapper.readValue(json, PassDataInfo.class);
-            return passDataInfo.password;
-        } catch (Exception e) {
-            return e.getMessage();
-        }
-    }
-
-    @RequestMapping(
-            path = "checkpasswordpost" ,
+            path = "/checkpasswordpost" ,
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE,
             method = RequestMethod.POST
@@ -69,17 +52,7 @@ public class PassDataController {
     }
 
     @RequestMapping(
-            path = "checkpasswordpostex" ,
-            consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE,
-            method = RequestMethod.POST
-    )
-    public String checkPasswordPostEx(@RequestBody PassDataInfo passDataInfo) throws PassDataFileNotFoundException {
-        throw new PassDataFileNotFoundException("file not found");
-    }
-
-    @RequestMapping(
-            path = "readdatapost" ,
+            path = "/readdatapost" ,
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE,
             method = RequestMethod.POST

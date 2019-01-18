@@ -1,19 +1,17 @@
 package com.romanpulov.violetnotewss.controller;
 
 import com.romanpulov.violetnotewss.model.DataItem;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.ServletContext;
-import java.io.File;
-
 @RestController
+@RequestMapping("/hello")
 public class HelloController {
 
-    @RequestMapping(path = "/", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
+    @SuppressWarnings("SameReturnValue")
+    @RequestMapping(path = "", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
     public String index() {
         return "Hello from HelloController";
     }

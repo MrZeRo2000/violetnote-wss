@@ -17,6 +17,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.File;
 
+/**
+ * Test for services
+ */
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = {PassDataManagementService.class, MockServletContext.class})
 public class ServicesTest {
@@ -39,7 +42,7 @@ public class ServicesTest {
     private PassDataManagementService passDataManagementService;
 
     @Test
-    public void serviceLoads() throws Exception {
+    public void serviceLoads() {
         assertThat(passDataManagementService).isNotNull();
     }
 
