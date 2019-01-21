@@ -32,17 +32,7 @@ public class PassDataController {
     }
 
     @RequestMapping(
-            path = "/checkpassword" ,
-            consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE,
-            method = RequestMethod.PUT
-    )
-    public String checkPassword(@RequestBody PassDataInfo passDataInfo) {
-        return passDataInfo.password;
-    }
-
-    @RequestMapping(
-            path = "/checkpasswordpost" ,
+            path = "/password",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE,
             method = RequestMethod.POST
@@ -52,7 +42,7 @@ public class PassDataController {
     }
 
     @RequestMapping(
-            path = "/readdatapost" ,
+            path = "/" ,
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE,
             method = RequestMethod.POST

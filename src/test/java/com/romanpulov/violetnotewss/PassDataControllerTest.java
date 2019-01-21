@@ -22,7 +22,7 @@ public class PassDataControllerTest extends BaseApplicationTest {
 
     @Test
     public void restPassDataCheckPassword() {
-        String url = getBaseUrl() + "checkpasswordpost";
+        String url = getBaseUrl() + "password";
 
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode passwordNode = mapper.createObjectNode();
@@ -44,5 +44,23 @@ public class PassDataControllerTest extends BaseApplicationTest {
         assertThat(context.getInitParameter(PassDataManagementService.PASS_DATA_FILE_NAME_PARAM_NAME)).isEqualTo("data/test1.vnf");
         String fileNameResult = this.restTemplate.getForObject(getBaseUrl() + "filename", String.class);
         assertThat(fileNameResult).contains("file exists:true");
+    }
+
+    @Test
+    public void passData() {
+        String url = getBaseUrl();
+
+        ObjectMapper mapper = new ObjectMapper();
+        ObjectNode passwordNode = mapper.createObjectNode();
+        passwordNode.put("password", "123456");
+
+        // set headers
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<String> entity = new HttpEntity<>(passwordNode.toString(), headers);
+        PassData answer = restTemplate.postForObject(url, entity, PassData.class);
+
+        assertThat(answer.passCategoryList.length).isEqualTo(4);
+        assertThat(answer.passNoteList.length).isEqualTo(7);
     }
 }
