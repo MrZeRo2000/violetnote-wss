@@ -42,7 +42,7 @@ public class PassDataController {
     }
 
     @RequestMapping(
-            path = "/" ,
+            path = "",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE,
             method = RequestMethod.POST
