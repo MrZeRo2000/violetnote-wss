@@ -2,7 +2,7 @@ package com.romanpulov.violetnotewss.model;
 
 public class ErrorResponse {
     private int errorCode;
-    private String message;
+    private String errorMessage;
 
     public int getErrorCode() {
         return errorCode;
@@ -10,10 +10,10 @@ public class ErrorResponse {
     public void setErrorCode(int errorCode) {
         this.errorCode = errorCode;
     }
-    public String getMessage() {
-        return message;
+    public String getErrorMessage() {
+        return errorMessage;
     }
-    public void setMessage(String message) {
-        this.message = message;
+    public void setErrorMessage(String errorMessage) {
+        this.errorMessage = errorMessage;
     }
 }

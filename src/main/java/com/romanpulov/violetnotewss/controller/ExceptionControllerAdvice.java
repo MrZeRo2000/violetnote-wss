@@ -13,7 +13,7 @@ public class ExceptionControllerAdvice {
     public ResponseEntity<ErrorResponse> exceptionHandler(Exception ex) {
         ErrorResponse error = new ErrorResponse();
         error.setErrorCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
-        error.setMessage(ex.getMessage());
+        error.setErrorMessage(ex.getMessage());
         return new ResponseEntity<>(error, HttpStatus.OK);
     }
 }

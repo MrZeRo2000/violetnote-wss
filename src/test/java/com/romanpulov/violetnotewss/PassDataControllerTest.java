@@ -2,6 +2,7 @@ package com.romanpulov.violetnotewss;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.romanpulov.violetnotewss.model.ErrorResponse;
 import com.romanpulov.violetnotewss.services.PassDataManagementService;
 import org.junit.Test;
 import org.springframework.http.HttpEntity;
@@ -62,5 +63,26 @@ public class PassDataControllerTest extends BaseApplicationTest {
 
         assertThat(answer.passCategoryList.length).isEqualTo(4);
         assertThat(answer.passNoteList.length).isEqualTo(7);
+    }
+
+    @Test
+    public void passDataWrongPassword() {
+        String url = getBaseUrl();
+
+        ObjectMapper mapper = new ObjectMapper();
+        ObjectNode passwordNode = mapper.createObjectNode();
+        passwordNode.put("password", "1234567");
+
+        // set headers
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<String> entity = new HttpEntity<>(passwordNode.toString(), headers);
+
+        ErrorResponse answer = restTemplate.postForObject(url, entity, ErrorResponse.class);
+        assertThat(answer.getErrorCode()).isEqualTo(404);
+
+        String stringAnswer = restTemplate.postForObject(url, entity, String.class);
+        assertThat(stringAnswer).contains("errorMessage");
+        assertThat(stringAnswer).contains("errorCode");
     }
 }

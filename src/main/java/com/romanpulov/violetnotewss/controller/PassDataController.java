@@ -80,7 +80,7 @@ public class PassDataController {
     public ResponseEntity<ErrorResponse> exceptionHandler(Exception ex) {
         ErrorResponse error = new ErrorResponse();
         error.setErrorCode(HttpStatus.NOT_FOUND.value());
-        error.setMessage(ex.getMessage());
+        error.setErrorMessage(ex.getMessage());
         return new ResponseEntity<>(error, HttpStatus.OK);
     }
 }
