@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.logging.Logger;
+
 @RestController
 @RequestMapping("/hello")
 public class HelloController {
@@ -13,6 +15,7 @@ public class HelloController {
     @SuppressWarnings("SameReturnValue")
     @RequestMapping(path = "", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
     public String index() {
+        Logger.getLogger(getClass().getName()).info("Hello from logger");
         return "Hello from HelloController";
     }
 
