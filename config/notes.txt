@@ -1,0 +1,35 @@
+
+# run command inside container
+docker exec -i -t violetnote-wss /bin/bash
+
+# run container
+docker run -it --name violetnote-wss --net=bridge -p 8888:8080 romanpulov/violetnote-wss:0.1
+
+# run background with mounting folder
+docker run -d --name violetnote-wss --net=bridge -p 8888:8080 --mount type=bind,source=/home/docker/pins,target=/pins,readonly  romanpulov/violetnote-wss:0.1
+
+# restart docker machine
+docker-machine restart
+
+# build image
+docker build -t romanpulov/violetnote-wss:0.1 .
+
+# remove container
+docker container rm -f violetnote-wss
+
+# remove image
+docker image rm romanpulov/violetnote-wss:0.1
+
+# mount host directory
+## Stop Docker Machine if it's running, with 
+docker-machine stop
+## In VirtualBox, add a Shared Folder: Settings > Shared Folders > Add share - this will be the directory where you want to locate your project, such as D:\Projects\Divio. Give it an appropriate Folder Name, such as Divio.
+## Restart Docker Machine
+docker-machine start
+## SSH into the Docker Machine, with 
+docker-machine ssh
+## Create a directory in the machine as a mount point for the project directories, for example: mkdir projects. This will be /home/docker/projects - you can verify it by running pwd.
+## Mount the Shared Folder you named above (Divio) at the mount point you have created: sudo mount -t vboxsf -o uid=1000,gid=50 Divio /home/docker/projects 
+
+#save image
+docker image save -o violetnote-wss.tar romanpulov/violetnote-wss:0.1

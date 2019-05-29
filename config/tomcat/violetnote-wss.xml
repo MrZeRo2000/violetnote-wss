@@ -1,0 +1,5 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Context>
+	<Parameter name="pass-data-file-name-prod" value="R:\Dropbox\VioletNote\MyPins.vnf"/>
+        <Parameter name="pass-data-file-name" value="/pins/1.txt"/>
+</Context>
