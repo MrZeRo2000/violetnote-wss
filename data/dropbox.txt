@@ -1,0 +1,6 @@
+
+request:
+https://www.dropbox.com/oauth2/authorize?client_id=m66ipiwlhbw3tuc&response_type=code&redirect_uri=http://localhost:8080/violetnote-ang
+
+response:
+http://localhost:8080/violetnote-ang?code=a1b2c3
