@@ -1,5 +1,6 @@
 package com.romanpulov.violetnotewss;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -15,9 +16,10 @@ import org.springframework.http.converter.json.MappingJacksonValue;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -94,6 +96,40 @@ public class JSONTest {
         String jsonMixin = mixinObjectMapper.writeValueAsString(tc);
 
         assertThat(jsonMixin).isEqualTo("{\"a\":7}");
+    }
+
+    @JsonIgnoreProperties(value = { "attrs", "y" })
+    static class TestMissedClass {
+        public int x;
+    }
+
+    @Test
+    public void missedClassMembers() throws Exception {
+        String json = "{\"x\":7,\"attrs\":{\"Name1\":\"Value1\"},\"y\":43}";
+        ObjectMapper objectMapper = new ObjectMapper();
+        TestMissedClass tc = objectMapper.readValue(json, TestMissedClass.class);
+
+        assertThat(7).isEqualTo(tc.x);
+    }
+
+    @JsonIgnoreProperties(value = { "attrs", "x" })
+    static class TestParseDates {
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
+        @JsonProperty("server_modified")
+        public Date modifiedDate;
+    }
+
+    @Test
+    public void parseDates() throws Exception {
+        String json = "{\"x\":7,\"attrs\":{\"Name1\":\"Value1\"},\"server_modified\":\"2016-06-30T14:58:44Z\"}";
+        ObjectMapper objectMapper = new ObjectMapper();
+        TestParseDates tc = objectMapper.readValue(json, TestParseDates.class);
+
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+        formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+        Date date = formatter.parse("2016-06-30T14:58:44Z");
+
+        assertThat(date).isEqualTo(tc.modifiedDate);
     }
 
 }

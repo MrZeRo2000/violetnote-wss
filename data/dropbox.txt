@@ -4,3 +4,6 @@ https://www.dropbox.com/oauth2/authorize?client_id=m66ipiwlhbw3tuc&response_type
 
 response:
 http://localhost:8080/violetnote-ang?code=a1b2c3
+
+auth key:
+IC-VZ7nhRZAAAAAAAAAAY8z8ODp0OHi7Dr46kZI5gIE
