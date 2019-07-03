@@ -3,6 +3,7 @@ package com.romanpulov.violetnotewss;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.romanpulov.violetnotewss.model.ErrorResponse;
+import com.romanpulov.violetnotewss.services.PassDataFileManagementService;
 import com.romanpulov.violetnotewss.services.PassDataManagementService;
 import org.junit.Test;
 import org.springframework.http.HttpEntity;
@@ -42,7 +43,7 @@ public class PassDataControllerTest extends BaseApplicationTest {
 
     @Test
     public void fileName() {
-        assertThat(context.getInitParameter(PassDataManagementService.PASS_DATA_FILE_NAME_PARAM_NAME)).isEqualTo("data/test1.vnf");
+        assertThat(context.getInitParameter(PassDataFileManagementService.PASS_DATA_FILE_NAME_PARAM_NAME)).isEqualTo("data/test1.vnf");
         String fileNameResult = this.restTemplate.getForObject(getBaseUrl() + "filename", String.class);
         assertThat(fileNameResult).contains("file exists:true");
     }

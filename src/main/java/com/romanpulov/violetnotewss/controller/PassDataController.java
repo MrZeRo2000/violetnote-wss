@@ -7,6 +7,7 @@ import com.romanpulov.violetnotecore.Model.PassData;
 import com.romanpulov.violetnotecore.Model.PassNote;
 import com.romanpulov.violetnotewss.model.ErrorResponse;
 import com.romanpulov.violetnotewss.model.PassDataInfo;
+import com.romanpulov.violetnotewss.services.PassDataFileManagementService;
 import com.romanpulov.violetnotewss.services.PassDataFileNotFoundException;
 import com.romanpulov.violetnotewss.services.PassDataFileReadException;
 import com.romanpulov.violetnotewss.services.PassDataManagementService;
@@ -41,15 +42,20 @@ public class PassDataController {
         }
     }
 
+    private final PassDataFileManagementService passDataFileManagementService;
     private final PassDataManagementService passDataManagementService;
 
-    public PassDataController(@Autowired PassDataManagementService passDataManagementService) {
+    public PassDataController(
+            PassDataFileManagementService passDataFileManagementService,
+            PassDataManagementService passDataManagementService
+            ) {
+        this.passDataFileManagementService = passDataFileManagementService;
         this.passDataManagementService = passDataManagementService;
     }
 
     @RequestMapping("/filename")
     public String getFileName() {
-        String fileName = passDataManagementService.getPassDataFileName();
+        String fileName = passDataFileManagementService.getPassDataFileName();
         File f = new File(fileName);
         return "FileName:" + fileName + ", file exists:" + f.exists();
     }
@@ -73,7 +79,7 @@ public class PassDataController {
     public PassData readDataPost(@RequestBody PassDataInfo passDataInfo)
         throws PassDataFileNotFoundException, PassDataFileReadException
     {
-        return passDataManagementService.readPassData(passDataInfo);
+        return passDataManagementService.readPassData(passDataInfo, passDataFileManagementService.getPassDataFileName());
     }
 
     @ExceptionHandler({PassDataFileNotFoundException.class, PassDataFileReadException.class})
