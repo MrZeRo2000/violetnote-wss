@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.*;
 
 import com.romanpulov.violetnotecore.Model.PassData;
 import com.romanpulov.violetnotewss.model.PassDataInfo;
+import com.romanpulov.violetnotewss.services.PassDataFileManagementService;
 import com.romanpulov.violetnotewss.services.PassDataFileNotFoundException;
 import com.romanpulov.violetnotewss.services.PassDataFileReadException;
 import com.romanpulov.violetnotewss.services.PassDataManagementService;
@@ -21,7 +22,7 @@ import java.io.File;
  * Test for services
  */
 @RunWith(SpringRunner.class)
-@ContextConfiguration(classes = {PassDataManagementService.class, MockServletContext.class})
+@ContextConfiguration(classes = {PassDataManagementService.class, PassDataFileManagementService.class, MockServletContext.class})
 public class ServicesTest {
     private static final String PASS_DATA_FILE_NAME = "data/test1.vnf";
     private static final String PASS_DATA_PASSWORD = "123456";
@@ -40,6 +41,9 @@ public class ServicesTest {
 
     @Autowired
     private PassDataManagementService passDataManagementService;
+
+    @Autowired
+    private PassDataFileManagementService passDataFileManagementService;
 
     @Test
     public void serviceLoads() {
@@ -63,13 +67,13 @@ public class ServicesTest {
 
     @Test(expected = PassDataFileReadException.class)
     public void readPassDataEmptyPassword() throws Exception {
-        passDataManagementService.readPassData(PassDataInfo.fromString(""), passDataFile.getAbsolutePath());
+        passDataManagementService.readPassData(new PassDataInfo(""), passDataFile.getAbsolutePath());
     }
 
     @Test(expected = PassDataFileReadException.class)
     public void readPassDataFileReadWrongPassword() throws Exception {
         passDataManagementService.readPassData(
-                PassDataInfo.fromString(PASS_DATA_WRONG_PASSWORD),
+                new PassDataInfo(PASS_DATA_WRONG_PASSWORD),
                 passDataFile.getAbsolutePath()
         );
     }
@@ -77,7 +81,7 @@ public class ServicesTest {
     @Test
     public void readPassData() throws Exception {
         PassData passData = passDataManagementService.readPassData(
-                PassDataInfo.fromString(PASS_DATA_PASSWORD),
+                new PassDataInfo(PASS_DATA_PASSWORD),
                 passDataFile.getAbsolutePath()
         );
 
@@ -85,5 +89,4 @@ public class ServicesTest {
         assertThat(passData.getPassCategoryList().size()).isEqualTo(4);
         assertThat(passData.getPassNoteList().size()).isEqualTo(7);
     }
-
 }

@@ -67,6 +67,26 @@ public class PassDataControllerTest extends BaseApplicationTest {
     }
 
     @Test
+    public void passDataDropbox() {
+        String url = getBaseUrl() + "dropbox";
+
+        ObjectMapper mapper = new ObjectMapper();
+        ObjectNode passwordNode = mapper.createObjectNode();
+        passwordNode.put("password", "123456");
+        passwordNode.put("auth-key", "IC-VZ7nhRZAAAAAAAAAAZTIxapCGU5yAnXt0o4PF1vjycHkNTXfOmrqQktgQil5Y");
+
+        // set headers
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<String> entity = new HttpEntity<>(passwordNode.toString(), headers);
+        PassData answer = restTemplate.postForObject(url, entity, PassData.class);
+
+        assertThat(answer.passCategoryList.length).isEqualTo(4);
+        assertThat(answer.passNoteList.length).isEqualTo(7);
+    }
+
+
+    @Test
     public void passDataWrongPassword() {
         String url = getBaseUrl();
 

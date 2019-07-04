@@ -6,11 +6,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.romanpulov.violetnotecore.Model.PassData;
 import com.romanpulov.violetnotecore.Model.PassNote;
 import com.romanpulov.violetnotewss.model.ErrorResponse;
+import com.romanpulov.violetnotewss.model.PassDataAuthInfo;
 import com.romanpulov.violetnotewss.model.PassDataInfo;
-import com.romanpulov.violetnotewss.services.PassDataFileManagementService;
-import com.romanpulov.violetnotewss.services.PassDataFileNotFoundException;
-import com.romanpulov.violetnotewss.services.PassDataFileReadException;
-import com.romanpulov.violetnotewss.services.PassDataManagementService;
+import com.romanpulov.violetnotewss.services.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,11 +20,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/passdata")
 public class PassDataController {
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     interface PassNoteMixin {
         @JsonIgnore()
@@ -44,13 +46,16 @@ public class PassDataController {
 
     private final PassDataFileManagementService passDataFileManagementService;
     private final PassDataManagementService passDataManagementService;
+    private final DropboxService dropboxService;
 
     public PassDataController(
             PassDataFileManagementService passDataFileManagementService,
-            PassDataManagementService passDataManagementService
+            PassDataManagementService passDataManagementService,
+            DropboxService dropboxService
             ) {
         this.passDataFileManagementService = passDataFileManagementService;
         this.passDataManagementService = passDataManagementService;
+        this.dropboxService = dropboxService;
     }
 
     @RequestMapping("/filename")
@@ -81,6 +86,32 @@ public class PassDataController {
     {
         return passDataManagementService.readPassData(passDataInfo, passDataFileManagementService.getPassDataFileName());
     }
+
+    @RequestMapping(
+            path = "/dropbox",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            method = RequestMethod.POST
+    )
+    public PassData readDataDropboxPost(@RequestBody PassDataAuthInfo passDataAuthInfo)
+            throws PassDataFileNotFoundException, PassDataFileReadException, IOException
+    {
+        String dropboxFileName = passDataFileManagementService.getDropboxFileName();
+        String downloadedFileName = passDataFileManagementService.getDownloadedFileName();
+
+        logger.debug(String.format("Downloading from dropbox: %s to %s", dropboxFileName, downloadedFileName));
+
+        dropboxService.downloadFile(
+                passDataAuthInfo.authKey,
+                dropboxFileName,
+                downloadedFileName
+        );
+
+        logger.debug(String.format("Reading from %s", downloadedFileName));
+
+        return passDataManagementService.readPassData(passDataAuthInfo, downloadedFileName);
+    }
+
 
     @ExceptionHandler({PassDataFileNotFoundException.class, PassDataFileReadException.class})
     public ResponseEntity<ErrorResponse> exceptionHandler(Exception ex) {
