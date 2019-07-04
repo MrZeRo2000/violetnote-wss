@@ -100,7 +100,7 @@ public class PassDataControllerTest extends BaseApplicationTest {
         HttpEntity<String> entity = new HttpEntity<>(passwordNode.toString(), headers);
 
         ErrorResponse answer = restTemplate.postForObject(url, entity, ErrorResponse.class);
-        assertThat(answer.getErrorCode()).isEqualTo(404);
+        assertThat(answer.errorCode).isEqualTo(404);
 
         String stringAnswer = restTemplate.postForObject(url, entity, String.class);
         assertThat(stringAnswer).contains("errorMessage");

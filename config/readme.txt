@@ -1,4 +1,4 @@
-violetnote-ws.xml
+violetnote-wss.xml
 needs to be placed to tomcat /conf/{engine}/{host} folder
 
 logging.properties:

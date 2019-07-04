@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.romanpulov.violetnotecore.Model.PassData;
 import com.romanpulov.violetnotecore.Model.PassNote;
 import com.romanpulov.violetnotewss.model.ErrorResponse;
+import com.romanpulov.violetnotewss.model.OkResponse;
 import com.romanpulov.violetnotewss.model.PassDataAuthInfo;
 import com.romanpulov.violetnotewss.model.PassDataInfo;
 import com.romanpulov.violetnotewss.services.*;
@@ -21,6 +22,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Map;
 
 @RestController
@@ -112,12 +115,80 @@ public class PassDataController {
         return passDataManagementService.readPassData(passDataAuthInfo, downloadedFileName);
     }
 
+    @RequestMapping(
+            path = "/dropbox/download",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            method = RequestMethod.POST
+    )
+    public OkResponse readDataDropboxDownloadPost(@RequestBody PassDataAuthInfo passDataAuthInfo)
+            throws IOException
+    {
+        String dropboxFileName = passDataFileManagementService.getDropboxFileName();
+        String downloadedFileName = passDataFileManagementService.getDownloadedFileName();
+
+        logger.debug(String.format("Downloading from dropbox: %s to %s", dropboxFileName, downloadedFileName));
+
+        dropboxService.downloadFile(
+                passDataAuthInfo.authKey,
+                dropboxFileName,
+                downloadedFileName
+        );
+
+        return new OkResponse("Ok");
+    }
+
+    @RequestMapping(
+            path = "/dropbox/read",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            method = RequestMethod.POST
+    )
+    public PassData readDataDropboxReadPost(@RequestBody PassDataAuthInfo passDataAuthInfo)
+            throws PassDataFileNotFoundException, PassDataFileReadException, IOException
+    {
+        String downloadedFileName = passDataFileManagementService.getDownloadedFileName();
+
+        if (!Files.exists(Paths.get(downloadedFileName))) {
+            throw new IOException(String.format("File %s not found", downloadedFileName));
+        }
+
+        logger.debug(String.format("Reading from: %s", downloadedFileName));
+
+        return passDataManagementService.readPassData(passDataAuthInfo, downloadedFileName);
+    }
+
+    @RequestMapping(
+            path = "/dropbox/checkedread",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            method = RequestMethod.POST
+    )
+    public PassData readDataDropboxCheckedReadPost(@RequestBody PassDataAuthInfo passDataAuthInfo)
+            throws PassDataFileNotFoundException, PassDataFileReadException, IOException
+    {
+        String downloadedFileName = passDataFileManagementService.getDownloadedFileName();
+
+        if (!Files.exists(Paths.get(downloadedFileName))) {
+            logger.debug(String.format("File %s not found, reading", downloadedFileName));
+
+            String dropboxFileName = passDataFileManagementService.getDropboxFileName();
+
+            dropboxService.downloadFile(
+                    passDataAuthInfo.authKey,
+                    dropboxFileName,
+                    downloadedFileName
+            );
+        }
+
+        logger.debug(String.format("Reading from: %s", downloadedFileName));
+
+        return passDataManagementService.readPassData(passDataAuthInfo, downloadedFileName);
+    }
 
     @ExceptionHandler({PassDataFileNotFoundException.class, PassDataFileReadException.class})
     public ResponseEntity<ErrorResponse> exceptionHandler(Exception ex) {
-        ErrorResponse error = new ErrorResponse();
-        error.setErrorCode(HttpStatus.NOT_FOUND.value());
-        error.setErrorMessage(ex.getMessage());
+        ErrorResponse error = new ErrorResponse(HttpStatus.NOT_FOUND.value(), ex.getMessage());
         return new ResponseEntity<>(error, HttpStatus.OK);
     }
 }

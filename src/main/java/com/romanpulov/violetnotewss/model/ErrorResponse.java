@@ -1,19 +1,18 @@
 package com.romanpulov.violetnotewss.model;
 
-public class ErrorResponse {
-    private int errorCode;
-    private String errorMessage;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-    public int getErrorCode() {
-        return errorCode;
-    }
-    public void setErrorCode(int errorCode) {
+public class ErrorResponse {
+    @JsonProperty("errorCode")
+    public final int errorCode;
+
+    @JsonProperty("errorMessage")
+    public final String errorMessage;
+
+    @JsonCreator
+    public ErrorResponse(@JsonProperty("errorCode") int errorCode, @JsonProperty("errorMessage") String errorMessage) {
         this.errorCode = errorCode;
-    }
-    public String getErrorMessage() {
-        return errorMessage;
-    }
-    public void setErrorMessage(String errorMessage) {
         this.errorMessage = errorMessage;
     }
 }
