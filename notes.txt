@@ -6,4 +6,4 @@ Run tests:
   gradlew clean test --info
 
 Build and deploy to local Tomcat:
-  gradlew deploy
+  gradlew clean war deploy
