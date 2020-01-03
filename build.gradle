@@ -35,7 +35,7 @@ dependencies {
 }
 
 ext {
-    tomcat_home='D:/prj/apache-tomcat-9.0.26'
+    tomcat_home='D:/prj/apache-tomcat-9.0.14'
     tomcat_webapps = tomcat_home + '/webapps'
 }
 
