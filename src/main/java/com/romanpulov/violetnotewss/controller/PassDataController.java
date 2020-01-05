@@ -5,10 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.romanpulov.violetnotecore.Model.PassData;
 import com.romanpulov.violetnotecore.Model.PassNote;
-import com.romanpulov.violetnotewss.model.ErrorResponse;
-import com.romanpulov.violetnotewss.model.OkResponse;
-import com.romanpulov.violetnotewss.model.PassDataAuthInfo;
-import com.romanpulov.violetnotewss.model.PassDataInfo;
+import com.romanpulov.violetnotewss.model.*;
 import com.romanpulov.violetnotewss.services.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,7 +34,7 @@ public class PassDataController {
     }
 
     @Configuration
-    public class JacksonConfiguration {
+    public static class JacksonConfiguration {
 
         @Bean
         public ObjectMapper objectMapper() {
@@ -66,6 +63,17 @@ public class PassDataController {
         String fileName = passDataFileManagementService.getPassDataFileName();
         File f = new File(fileName);
         return "FileName:" + fileName + ", file exists:" + f.exists();
+    }
+
+    @RequestMapping(
+            path = "/fileinfo",
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            method = RequestMethod.GET
+    )
+    public PassDataFileInfo getDataFileInfo() {
+        String fileName = passDataFileManagementService.getPassDataFileName();
+        File f = new File(fileName);
+        return new PassDataFileInfo(fileName, f.exists());
     }
 
     @RequestMapping(

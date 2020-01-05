@@ -3,11 +3,11 @@ apply plugin: 'java'
 apply plugin: 'war'
 
 war {
-    archiveName = 'violetnote-wss.war'
+    archiveFileName = 'violetnote-wss.war'
 }
 
 group = 'com.romanpulov'
-version = '1.1'
+version = '1.2'
 
 description = """violetnote-wss Webapp"""
 
@@ -25,9 +25,7 @@ repositories {
 
 dependencies {
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version:'2.0.3.RELEASE'
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-aop', version:'2.0.3.RELEASE'
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version:'2.0.3.RELEASE'
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version:'2.9.6'
     compile group: 'com.romanpulov', name: 'violetnote-core', version:'1.1-SNAPSHOT'
     providedCompile group: 'org.springframework.boot', name: 'spring-boot-starter-tomcat', version:'2.0.3.RELEASE'
     testCompile 'junit:junit:4.12'
