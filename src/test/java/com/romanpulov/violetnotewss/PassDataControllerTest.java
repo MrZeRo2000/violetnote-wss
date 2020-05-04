@@ -4,8 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.romanpulov.violetnotewss.model.ErrorResponse;
 import com.romanpulov.violetnotewss.services.PassDataFileManagementService;
-import com.romanpulov.violetnotewss.services.PassDataManagementService;
-import org.junit.Test;
+
+import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;

@@ -1,7 +1,8 @@
 package com.romanpulov.violetnotewss;
 
 import com.romanpulov.violetnotewss.services.DropboxService;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.*;
 
 import java.io.File;
@@ -10,6 +11,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
 
+@Disabled
 public class DropboxTest {
 
     @Test

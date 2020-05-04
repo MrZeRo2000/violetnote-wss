@@ -1,22 +1,26 @@
+plugins {
+    id 'org.springframework.boot' version '2.2.6.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+    id 'java'
+    id 'war'
+}
 
-apply plugin: 'java'
-apply plugin: 'war'
+ext {
+    file_name = 'violetnote-wss.war'
+    file_name_int = 'violetnote-int-wss.war'
+}
 
-war {
-    archiveFileName = 'violetnote-wss.war'
+bootWar {
+    archiveFileName = file_name
 }
 
 group = 'com.romanpulov'
-version = '1.2.1'
+version = '1.3.1'
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 description = """violetnote-wss Webapp"""
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
-tasks.withType(JavaCompile) {
-	options.encoding = 'UTF-8'
-}
-              
 repositories {
     jcenter()
     //for violetnote-core
@@ -24,13 +28,21 @@ repositories {
 }
 
 dependencies {
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version:'2.0.3.RELEASE'
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-aop', version:'2.0.3.RELEASE'
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version:'2.0.3.RELEASE'
-    compile group: 'com.romanpulov', name: 'violetnote-core', version:'1.2'
-    providedCompile group: 'org.springframework.boot', name: 'spring-boot-starter-tomcat', version:'2.0.3.RELEASE'
-    testCompile 'junit:junit:4.12'
-    testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version:'2.0.3.RELEASE'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-aop'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+    implementation 'com.romanpulov:violetnote-core:1.2'
+
+    providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
+
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
+}
+
+test {
+    useJUnitPlatform()
 }
 
 ext {
