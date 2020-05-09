@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.romanpulov.violetnotewss.model.ErrorResponse;
 import com.romanpulov.violetnotewss.services.PassDataFileManagementService;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -67,6 +68,7 @@ public class PassDataControllerTest extends BaseApplicationTest {
     }
 
     @Test
+    @Disabled
     public void passDataDropbox() {
         String url = getBaseUrl() + "dropbox";
 
