@@ -12,7 +12,6 @@ import javax.servlet.ServletContext;
  * Base class for test which require application context
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ContextConfiguration(classes={Application.class})
 public abstract class BaseApplicationTest {
 
     @LocalServerPort
@@ -22,7 +21,6 @@ public abstract class BaseApplicationTest {
     protected ServletContext context;
 
     @Autowired
-    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     protected TestRestTemplate restTemplate;
 
     String getBaseUrl() {
