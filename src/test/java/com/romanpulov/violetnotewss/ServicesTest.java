@@ -3,7 +3,6 @@ package com.romanpulov.violetnotewss;
 import static org.assertj.core.api.Assertions.*;
 
 import com.romanpulov.violetnotecore.Model.PassData;
-import com.romanpulov.violetnotewss.application.Application;
 import com.romanpulov.violetnotewss.model.PassDataInfo;
 import com.romanpulov.violetnotewss.services.PassDataFileManagementService;
 import com.romanpulov.violetnotewss.services.PassDataFileNotFoundException;
@@ -13,7 +12,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.mock.web.MockServletContext;
 import org.springframework.test.context.ContextConfiguration;
 
 import org.junit.jupiter.api.Test;

@@ -1,15 +1,11 @@
-package com.romanpulov.violetnotewss.application;
+package com.romanpulov.violetnotewss;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
-@SpringBootApplication(scanBasePackages = {
-        "com.romanpulov.violetnotewss.controller",
-        "com.romanpulov.violetnotewss.services",
-        "com.romanpulov.violetnotewss.aspect"
-})
+@SpringBootApplication
 public class Application extends SpringBootServletInitializer {
 
     @Override

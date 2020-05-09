@@ -1,4 +1,4 @@
-package com.romanpulov.violetnotewss.application.config;
+package com.romanpulov.violetnotewss.config;
 
 import org.springframework.beans.factory.InjectionPoint;
 import org.springframework.context.annotation.Bean;
