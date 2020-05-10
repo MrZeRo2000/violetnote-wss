@@ -1,4 +1,4 @@
-package com.romanpulov.violetnotewss.services;
+package com.romanpulov.violetnotewss.exception;
 
 public class PassDataFileNotFoundException extends Exception {
 

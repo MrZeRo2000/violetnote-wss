@@ -1,5 +1,7 @@
 package com.romanpulov.violetnotewss.services;
 
+import com.romanpulov.violetnotewss.exception.PassDataFileNotFoundException;
+import com.romanpulov.violetnotewss.exception.PassDataFileReadException;
 import com.romanpulov.violetnotewss.model.PassDataInfo;
 
 import com.romanpulov.violetnotecore.AESCrypt.AESCryptException;

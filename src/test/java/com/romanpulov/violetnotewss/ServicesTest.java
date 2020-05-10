@@ -5,8 +5,8 @@ import static org.assertj.core.api.Assertions.*;
 import com.romanpulov.violetnotecore.Model.PassData;
 import com.romanpulov.violetnotewss.model.PassDataInfo;
 import com.romanpulov.violetnotewss.services.PassDataFileManagementService;
-import com.romanpulov.violetnotewss.services.PassDataFileNotFoundException;
-import com.romanpulov.violetnotewss.services.PassDataFileReadException;
+import com.romanpulov.violetnotewss.exception.PassDataFileNotFoundException;
+import com.romanpulov.violetnotewss.exception.PassDataFileReadException;
 import com.romanpulov.violetnotewss.services.PassDataManagementService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -22,7 +22,6 @@ import java.io.File;
  * Test for services
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ContextConfiguration(classes={Application.class})
 public class ServicesTest {
     private static final String PASS_DATA_FILE_NAME = "data/test1.vnf";
     private static final String PASS_DATA_PASSWORD = "123456";
