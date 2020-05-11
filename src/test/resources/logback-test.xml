@@ -3,5 +3,5 @@
     <property resource="application.properties"/>
     <property name="LOG_FILE" value="${LOG_FILE:-${LOG_PATH:-${LOG_TEMP:-${java.io.tmpdir:-/tmp}}}/violetnote-wss-test.log}"/>
     <include resource="org/springframework/boot/logging/logback/base.xml"/>
-    <logger name="org.springframework.web" level="DEBUG"/>
+    <logger name="com.romanpulov.violetnotewss" level="DEBUG"/>
 </configuration>

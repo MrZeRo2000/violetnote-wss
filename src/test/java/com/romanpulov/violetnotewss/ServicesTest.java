@@ -22,6 +22,7 @@ import java.io.File;
  * Test for services
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@ContextConfiguration
 public class ServicesTest {
     private static final String PASS_DATA_FILE_NAME = "data/test1.vnf";
     private static final String PASS_DATA_PASSWORD = "123456";
