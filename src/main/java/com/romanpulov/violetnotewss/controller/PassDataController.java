@@ -28,22 +28,6 @@ import java.util.Map;
 public class PassDataController {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    interface PassNoteMixin {
-        @JsonIgnore()
-        Map<String, String> getNoteAttr();
-    }
-
-    @Configuration
-    public static class JacksonConfiguration {
-
-        @Bean
-        public ObjectMapper objectMapper() {
-            ObjectMapper mapper = new ObjectMapper();
-            mapper.addMixIn(PassNote.class, PassNoteMixin.class);
-            return mapper;
-        }
-    }
-
     private final PassDataFileManagementService passDataFileManagementService;
     private final PassDataManagementService passDataManagementService;
     private final DropboxService dropboxService;
