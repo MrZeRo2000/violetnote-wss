@@ -32,6 +32,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-aop'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
+    implementation 'com.romanpulov:jutils-core:0.2'
     implementation 'com.romanpulov:violetnote-core:1.2'
 
     providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
