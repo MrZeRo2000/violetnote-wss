@@ -178,9 +178,4 @@ public class PassDataController {
         return passDataManagementService.readPassData(passDataAuthInfo, downloadedFileName);
     }
 
-    @ExceptionHandler({PassDataFileNotFoundException.class, PassDataFileReadException.class})
-    public ResponseEntity<ErrorResponse> exceptionHandler(Exception ex) {
-        ErrorResponse error = new ErrorResponse(HttpStatus.NOT_FOUND.value(), ex.getMessage());
-        return new ResponseEntity<>(error, HttpStatus.OK);
-    }
 }
