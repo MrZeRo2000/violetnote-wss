@@ -10,6 +10,7 @@ import com.romanpulov.violetnotecore.AESCrypt.AESCryptService;
 import com.romanpulov.violetnotecore.Model.PassData;
 import com.romanpulov.violetnotecore.Processor.Exception.DataReadWriteException;
 import com.romanpulov.violetnotecore.Processor.XMLPassDataReader;
+import com.romanpulov.violetnotewss.exception.PassDataFileWriteException;
 import com.romanpulov.violetnotewss.model.PasswordProvider;
 import org.springframework.stereotype.Service;
 
@@ -45,36 +46,36 @@ public class PassDataManagementService {
         }
     }
 
-    public boolean savePassData(PasswordProvider passwordProvider, String fileName, PassData passData) {
+    public void savePassData(PasswordProvider passwordProvider, String fileName, PassData passData)
+            throws PassDataFileWriteException
+    {
         boolean result;
 
         File f = new File(fileName);
 
         // save as temp file first
         File tempFile = new File(FileUtils.getTempFileName(f.getPath()));
-        result = savePassDataInternal(passwordProvider, tempFile, passData);
-        if (!result)
-            return false;
+        savePassDataInternal(passwordProvider, tempFile, passData);
 
         //roll backup files
-        result = FileUtils.saveCopies(f.getPath());
-        if (!result)
-            return false;
+        if (!FileUtils.saveCopies(f.getPath()))
+            throw new PassDataFileWriteException("Error saving copies of the file: " + f.getPath());
 
         //rename temp file
-        result = FileUtils.renameTempFile(tempFile.getPath());
-        return result;
+
+        if (!FileUtils.renameTempFile(tempFile.getPath())) {
+            throw new PassDataFileWriteException("Error renaming temp file: " + tempFile.getPath());
+        }
     }
 
-    private boolean savePassDataInternal(PasswordProvider passwordProvider, File f, PassData passData) {
+    private void savePassDataInternal(PasswordProvider passwordProvider, File f, PassData passData)
+            throws PassDataFileWriteException {
         try (OutputStream output = AESCryptService.generateCryptOutputStream(new FileOutputStream(f), passwordProvider.getPassword())) {
 
             (new XMLPassDataWriter(passData)).writeStream(output);
-
-            return true;
         } catch (AESCryptException | IOException | DataReadWriteException e) {
             e.printStackTrace();
-            return false;
+            throw new PassDataFileWriteException("Data file write error:" + e.getMessage());
         }
     }
 }
