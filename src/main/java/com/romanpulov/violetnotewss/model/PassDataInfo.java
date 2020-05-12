@@ -6,12 +6,17 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 /**
  * Authentication info for PassData
  */
-public class PassDataInfo {
+public class PassDataInfo implements PasswordProvider {
     @JsonProperty("password")
     public final String password;
 
-    public boolean isEmptyPassword() {
+    public boolean isPasswordEmpty() {
         return password == null || password.isEmpty();
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
     }
 
     @JsonCreator

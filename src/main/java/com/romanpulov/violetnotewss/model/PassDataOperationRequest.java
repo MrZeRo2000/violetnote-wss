@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class PassDataOperationRequest extends PassDataGetRequest {
     @JsonProperty("operation")
-    public final String operation;
+    private final String operation;
 
     @JsonCreator
     public PassDataOperationRequest(
@@ -20,12 +20,16 @@ public class PassDataOperationRequest extends PassDataGetRequest {
         this.operation = operation;
     }
 
+    public String getOperation() {
+        return operation;
+    }
+
     @Override
     public String toString() {
         return "PassDataOperationRequest{" +
                 "operation='" + operation + '\'' +
-                ", fileName='" + fileName + '\'' +
-                ", password='" + password + '\'' +
+                ", fileName='" + getFileName() + '\'' +
+                ", password='" + getPassword() + '\'' +
                 '}';
     }
 }
