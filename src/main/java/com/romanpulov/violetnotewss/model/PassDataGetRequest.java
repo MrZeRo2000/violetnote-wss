@@ -1,6 +1,7 @@
 package com.romanpulov.violetnotewss.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
@@ -13,6 +14,7 @@ public class PassDataGetRequest implements PasswordProvider {
     @JsonProperty("password")
     private final String password;
 
+    @JsonIgnore
     public boolean isPasswordEmpty() {
         return password == null || password.isEmpty();
     }
