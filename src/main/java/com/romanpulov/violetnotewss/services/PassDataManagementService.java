@@ -49,12 +49,12 @@ public class PassDataManagementService {
     public void savePassData(PasswordProvider passwordProvider, String fileName, PassData passData)
             throws PassDataFileWriteException
     {
-        boolean result;
-
         File f = new File(fileName);
 
         // save as temp file first
         File tempFile = new File(FileUtils.getTempFileName(f.getPath()));
+
+        // saving data to a temporary file
         savePassDataInternal(passwordProvider, tempFile, passData);
 
         //roll backup files
@@ -62,10 +62,22 @@ public class PassDataManagementService {
             throw new PassDataFileWriteException("Error saving copies of the file: " + f.getPath());
 
         //rename temp file
-
         if (!FileUtils.renameTempFile(tempFile.getPath())) {
             throw new PassDataFileWriteException("Error renaming temp file: " + tempFile.getPath());
         }
+    }
+
+    public void newPassData(PasswordProvider passwordProvider, String fileName, PassData passData)
+            throws PassDataFileWriteException {
+        File f = new File(fileName);
+
+        // the new file should not exist
+        if (f.exists()) {
+            throw new PassDataFileWriteException("Error writing new file: the file already exists: " + f.getPath());
+        }
+
+        // saving file
+        savePassDataInternal(passwordProvider, f, passData);
     }
 
     private void savePassDataInternal(PasswordProvider passwordProvider, File f, PassData passData)
