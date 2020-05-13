@@ -8,10 +8,18 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
 public class BaseControllerMockMvcTest {
+
+    @FunctionalInterface
+    public interface ThrowableRunnable {
+        public abstract void run() throws Exception;
+    }
 
     protected MockMvc mvc;
 
@@ -40,5 +48,14 @@ public class BaseControllerMockMvcTest {
     public BaseControllerMockMvcTest(WebApplicationContext context) {
         this.context = context;
         this.mvc = MockMvcBuilders.webAppContextSetup(context).build();
+    }
+
+    protected void runLogged(ThrowableRunnable function, String logFileName) throws Exception {
+        try {
+            function.run();
+        } finally {
+            Path f = Paths.get(System.getProperty("java.io.tmpdir") + logFileName);
+            Files.write(f, logResult, StandardCharsets.UTF_8);
+        }
     }
 }

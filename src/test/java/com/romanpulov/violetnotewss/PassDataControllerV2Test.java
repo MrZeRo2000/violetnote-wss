@@ -1,34 +1,32 @@
 package com.romanpulov.violetnotewss;
 
 import com.romanpulov.violetnotewss.model.PassDataGetRequest;
-import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class PassDataControllerV2Test extends BaseControllerMockMvcTest {
+
+    private static final String DATA_FILE_NAME = "data/test1.vnf";
+    public static final String DATA_FILE_PASSWORD = "123456";
 
     public PassDataControllerV2Test(WebApplicationContext context) {
         super(context);
     }
 
     @Test
+    @Disabled
     void testGetPassData() throws Exception {
-        try {
-
+        runLogged(() -> {
             addResult(this.mvc.perform(MockMvcRequestBuilders.post("/v2/passdata")
                     .contentType(MediaType.APPLICATION_JSON)
                     .characterEncoding(StandardCharsets.UTF_8.name())
@@ -66,7 +64,7 @@ public class PassDataControllerV2Test extends BaseControllerMockMvcTest {
             addResult(this.mvc.perform(MockMvcRequestBuilders.post("/v2/passdata")
                     .contentType(MediaType.APPLICATION_JSON)
                     .characterEncoding(StandardCharsets.UTF_8.name())
-                    .content(mapper.writeValueAsString(new PassDataGetRequest("data/test1.vnf", "123456")))
+                    .content(mapper.writeValueAsString(new PassDataGetRequest(DATA_FILE_NAME, DATA_FILE_PASSWORD)))
                     .accept(MediaType.APPLICATION_JSON_VALUE))
                     .andExpect(MockMvcResultMatchers.status().isOk())
                     .andExpect(MockMvcResultMatchers.jsonPath("$.errorCode").doesNotExist())
@@ -77,10 +75,10 @@ public class PassDataControllerV2Test extends BaseControllerMockMvcTest {
                     .andReturn()
             );
 
+        }, "PassDataControllerV2GetPassData.log");
+    }
 
-        } finally {
-            Path f = Paths.get(System.getProperty("java.io.tmpdir") + "PassDataControllerV2GetPassData.log");
-            Files.write(f, logResult, StandardCharsets.UTF_8);
-        }
+    void testSavePassData() throws Exception {
+
     }
 }
