@@ -4,6 +4,8 @@ import com.romanpulov.violetnotecore.Model.PassData;
 import com.romanpulov.violetnotewss.exception.PassDataFileNotFoundException;
 import com.romanpulov.violetnotewss.exception.PassDataFileReadException;
 import com.romanpulov.violetnotewss.exception.PassDataFileWriteException;
+import com.romanpulov.violetnotewss.mapper.PassDataDTOMapper;
+import com.romanpulov.violetnotewss.mapper.PassNoteDTOMapper;
 import com.romanpulov.violetnotewss.model.PassDataGetRequest;
 import com.romanpulov.violetnotewss.model.PassDataPersistRequest;
 import com.romanpulov.violetnotewss.services.PassDataManagementService;
@@ -18,9 +20,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class PassDataControllerV2 {
 
     private final PassDataManagementService passDataManagementService;
+    private final PassDataDTOMapper passDataDTOMapper;
 
-    public PassDataControllerV2(PassDataManagementService passDataManagementService) {
+    public PassDataControllerV2(PassDataManagementService passDataManagementService, PassDataDTOMapper passDataDTOMapper) {
         this.passDataManagementService = passDataManagementService;
+        this.passDataDTOMapper = passDataDTOMapper;
     }
 
     @PostMapping("")
@@ -37,7 +41,8 @@ public class PassDataControllerV2 {
         // read previously saved data to make sure
         passDataManagementService.readPassData(persistRequest, persistRequest.getFileName());
         // write the data
-        passDataManagementService.savePassData(persistRequest, persistRequest.getFileName(), persistRequest.getPassData());
+        passDataManagementService.savePassData(persistRequest, persistRequest.getFileName(),
+                passDataDTOMapper.dtoToCore(persistRequest.getPassData()));
         // read again and return
         return ResponseEntity.ok(passDataManagementService.readPassData(persistRequest, persistRequest.getFileName()));
     }
@@ -47,7 +52,8 @@ public class PassDataControllerV2 {
             throws PassDataFileNotFoundException, PassDataFileReadException, PassDataFileWriteException
     {
         // write the data
-        passDataManagementService.newPassData(persistRequest, persistRequest.getFileName(), persistRequest.getPassData());
+        passDataManagementService.newPassData(persistRequest, persistRequest.getFileName(),
+                passDataDTOMapper.dtoToCore(persistRequest.getPassData()));
         // read and return
         return ResponseEntity.ok(passDataManagementService.readPassData(persistRequest, persistRequest.getFileName()));
     }

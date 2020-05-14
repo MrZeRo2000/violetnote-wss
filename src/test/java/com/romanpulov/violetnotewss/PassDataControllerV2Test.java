@@ -1,12 +1,17 @@
 package com.romanpulov.violetnotewss;
 
-import com.romanpulov.violetnotewss.model.PassDataGetRequest;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.romanpulov.violetnotecore.Model.PassCategory;
+import com.romanpulov.violetnotewss.model.*;
+import org.assertj.core.util.Arrays;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.web.context.WebApplicationContext;
@@ -16,6 +21,8 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class PassDataControllerV2Test extends BaseControllerMockMvcTest {
@@ -86,6 +93,74 @@ public class PassDataControllerV2Test extends BaseControllerMockMvcTest {
     void testSavePassData() throws Exception {
         String testFilePath = "test_save_pass_data";
         String testFileFolder = prepareTempDirFolder(testFilePath);
-        Files.copy(Paths.get(DATA_FILE_NAME), Paths.get(testFileFolder + "/test_file.vnf"));
+        String testFileName = testFileFolder + "/test_file.vnf";
+        Files.copy(Paths.get(DATA_FILE_NAME), Paths.get(testFileName));
+
+        runLogged(() -> {
+            // read initial data
+            MvcResult result = this.mvc.perform(MockMvcRequestBuilders.post("/v2/passdata")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .characterEncoding(StandardCharsets.UTF_8.name())
+                    .content(mapper.writeValueAsString(new PassDataGetRequest(testFileName, DATA_FILE_PASSWORD)))
+                    .accept(MediaType.APPLICATION_JSON_VALUE))
+                    .andExpect(MockMvcResultMatchers.status().isOk())
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.errorCode").doesNotExist())
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.passCategoryList").isArray())
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.passCategoryList", Matchers.hasSize(4)))
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.passNoteList").isArray())
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.passNoteList", Matchers.hasSize(7)))
+                    .andReturn();
+
+            addResult(result);
+
+            ObjectMapper mapper = new ObjectMapper();
+            PassDataDTO passData = mapper.readValue(
+                    result.getResponse().getContentAsString(),
+                    PassDataDTO.class
+            );
+
+            Assertions.assertEquals(4, passData.passCategoryList.size());
+            Assertions.assertEquals(7, passData.passNoteList.size());
+
+            PassCategoryDTO passCategoryDTO = new PassCategoryDTO("New Category", null);
+            PassNoteDTO passNoteDTO = new PassNoteDTO(passCategoryDTO, "system", "user",
+                    "password", "comments", "custom", "info", null, null, true);
+
+            List<PassCategoryDTO> passCategoryDTOList = new ArrayList<>();
+            passCategoryDTOList.add(passCategoryDTO);
+
+            List<PassNoteDTO> passNoteDTOList = new ArrayList<>();
+            passNoteDTOList.add(passNoteDTO);
+
+            PassDataDTO passDataDTO = new PassDataDTO(passCategoryDTOList, passNoteDTOList);
+
+            PassDataPersistRequest pr = new PassDataPersistRequest(testFileName, DATA_FILE_PASSWORD, passDataDTO);
+
+            json = mapper.writeValueAsString(pr);
+
+            addResult(this.mvc.perform(MockMvcRequestBuilders.post("/v2/passdata/edit")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .characterEncoding(StandardCharsets.UTF_8.name())
+                    .content(json)
+                    .accept(MediaType.APPLICATION_JSON_VALUE))
+                    .andExpect(MockMvcResultMatchers.status().isOk())
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.errorCode").doesNotExist())
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.passCategoryList").isArray())
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.passCategoryList", Matchers.hasSize(1)))
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.passCategoryList[0].categoryName").value(passCategoryDTO.categoryName))
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.passCategoryList[0].parentCategory").doesNotExist())
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.passNoteList").isArray())
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.passNoteList", Matchers.hasSize(1)))
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.passNoteList[0].system").value(passNoteDTO.system))
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.passNoteList[0].user").value(passNoteDTO.user))
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.passNoteList[0].password").value(passNoteDTO.password))
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.passNoteList[0].comments").value(passNoteDTO.comments))
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.passNoteList[0].custom").value(passNoteDTO.custom))
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.passNoteList[0].info").value(passNoteDTO.info))
+                    .andReturn()
+            );
+
+        }, "PassDataControllerV2SavePassData.log");
+
     }
 }

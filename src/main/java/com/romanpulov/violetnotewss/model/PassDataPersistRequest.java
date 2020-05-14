@@ -6,7 +6,7 @@ import com.romanpulov.violetnotecore.Model.PassData;
 
 public class PassDataPersistRequest extends PassDataGetRequest {
     @JsonProperty("passData")
-    private final PassData passData;
+    private final PassDataDTO passData;
 
     @JsonCreator
     public PassDataPersistRequest(
@@ -15,13 +15,13 @@ public class PassDataPersistRequest extends PassDataGetRequest {
             @JsonProperty("password")
             String password,
             @JsonProperty("passData")
-            PassData passData
+            PassDataDTO passData
     ) {
         super(fileName, password);
         this.passData = passData;
     }
 
-    public PassData getPassData() {
+    public PassDataDTO getPassData() {
         return passData;
     }
 
