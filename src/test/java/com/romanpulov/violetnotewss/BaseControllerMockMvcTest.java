@@ -6,6 +6,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -54,8 +55,24 @@ public class BaseControllerMockMvcTest {
         try {
             function.run();
         } finally {
-            Path f = Paths.get(System.getProperty("java.io.tmpdir") + logFileName);
+            Path f = Paths.get(getTempDir() + logFileName);
             Files.write(f, logResult, StandardCharsets.UTF_8);
         }
+    }
+
+    protected String getTempDir() {
+        return System.getProperty("java.io.tmpdir");
+    }
+
+    protected String prepareTempDirFolder(String path) throws Exception {
+        String testFileFolder = getTempDir() + path;
+        Path testFileFolderPath = Paths.get(testFileFolder);
+        if (Files.exists(testFileFolderPath)) {
+            Files.list(testFileFolderPath).filter(Files::isRegularFile).map(Path::toFile).forEach(File::delete);
+        } else {
+            Files.createDirectory(testFileFolderPath);
+        }
+
+        return testFileFolder;
     }
 }

@@ -11,7 +11,11 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.io.File;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class PassDataControllerV2Test extends BaseControllerMockMvcTest {
@@ -52,7 +56,7 @@ public class PassDataControllerV2Test extends BaseControllerMockMvcTest {
             addResult(this.mvc.perform(MockMvcRequestBuilders.post("/v2/passdata")
                     .contentType(MediaType.APPLICATION_JSON)
                     .characterEncoding(StandardCharsets.UTF_8.name())
-                    .content(mapper.writeValueAsString(new PassDataGetRequest("data/test1.vnf", "dummy")))
+                    .content(mapper.writeValueAsString(new PassDataGetRequest(DATA_FILE_NAME + "1xq3", "dummy")))
                     .accept(MediaType.APPLICATION_JSON_VALUE))
                     .andExpect(MockMvcResultMatchers.status().isOk())
                     .andExpect(MockMvcResultMatchers.jsonPath("$.errorCode").value(HttpStatus.NOT_FOUND.value()))
@@ -78,7 +82,10 @@ public class PassDataControllerV2Test extends BaseControllerMockMvcTest {
         }, "PassDataControllerV2GetPassData.log");
     }
 
+    @Test
     void testSavePassData() throws Exception {
-
+        String testFilePath = "test_save_pass_data";
+        String testFileFolder = prepareTempDirFolder(testFilePath);
+        Files.copy(Paths.get(DATA_FILE_NAME), Paths.get(testFileFolder + "/test_file.vnf"));
     }
 }
