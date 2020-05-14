@@ -162,5 +162,9 @@ public class PassDataControllerV2Test extends BaseControllerMockMvcTest {
 
         }, "PassDataControllerV2SavePassData.log");
 
+        Assertions.assertEquals(2, Files.list(Paths.get(testFileFolder)).count());
+        Assertions.assertEquals(1,
+                Files.list(Paths.get(testFileFolder)).filter(path -> path.toString().endsWith("bak01")).count());
+
     }
 }
