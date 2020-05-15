@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-    <property resource="application.properties"/>
-    <property name="LOG_FILE" value="${catalina.home}/logs/violetnote.log"/>
+    <property resource="application-int.properties"/>
+    <property name="LOG_FILE" value="${catalina.home}/logs/violetnote-int.log"/>
     <include resource="org/springframework/boot/logging/logback/base.xml"/>
 </configuration>

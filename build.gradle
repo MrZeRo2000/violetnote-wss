@@ -51,11 +51,22 @@ ext {
     tomcat_webapps = tomcat_home + '/webapps'
 }
 
-tasks.register("deploy") {
-    dependsOn 'war'
+tasks.register("deployInt") {
+    dependsOn 'bootWar'
     copy {
         from "build/libs"
         into tomcat_webapps
-        include "*.war"
+        include file_name
+        rename file_name, file_name_int
+    }
+}
+
+
+tasks.register("deployProd") {
+    dependsOn 'bootWar'
+    copy {
+        from "build/libs"
+        into tomcat_webapps
+        include file_name
     }
 }
