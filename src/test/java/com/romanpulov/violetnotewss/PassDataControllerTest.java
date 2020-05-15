@@ -3,15 +3,15 @@ package com.romanpulov.violetnotewss;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.romanpulov.violetnotewss.model.ErrorResponse;
+import com.romanpulov.violetnotewss.model.PassDataDTO;
 import com.romanpulov.violetnotewss.services.PassDataFileManagementService;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
@@ -62,10 +62,10 @@ public class PassDataControllerTest extends BaseApplicationTest {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<String> entity = new HttpEntity<>(passwordNode.toString(), headers);
-        PassData answer = restTemplate.postForObject(url, entity, PassData.class);
+        PassDataDTO answer = restTemplate.postForObject(url, entity, PassDataDTO.class);
 
-        assertThat(answer.passCategoryList.length).isEqualTo(4);
-        assertThat(answer.passNoteList.length).isEqualTo(7);
+        assertThat(answer.passCategoryList.size()).isEqualTo(4);
+        assertThat(answer.passNoteList.size()).isEqualTo(7);
     }
 
     @Test
@@ -82,10 +82,10 @@ public class PassDataControllerTest extends BaseApplicationTest {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<String> entity = new HttpEntity<>(passwordNode.toString(), headers);
-        PassData answer = restTemplate.postForObject(url, entity, PassData.class);
+        PassDataDTO answer = restTemplate.postForObject(url, entity, PassDataDTO.class);
 
-        assertThat(answer.passCategoryList.length).isEqualTo(4);
-        assertThat(answer.passNoteList.length).isEqualTo(7);
+        assertThat(answer.passCategoryList.size()).isEqualTo(4);
+        assertThat(answer.passNoteList.size()).isEqualTo(7);
     }
 
 

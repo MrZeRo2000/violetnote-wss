@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Date;
+import java.util.Map;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class PassNoteDTO {
@@ -19,6 +20,9 @@ public class PassNoteDTO {
     public final Date createdDate;
     public final Date modifiedDate;
     public final boolean active;
+
+    @JsonIgnore()
+    public final Map<String, String> noteAttr = null;
 
     @JsonCreator
     public PassNoteDTO(

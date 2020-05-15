@@ -6,6 +6,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.romanpulov.violetnotewss.model.PassCategoryDTO;
+import com.romanpulov.violetnotewss.model.PassDataDTO;
 import org.junit.jupiter.api.Test;
 
 import java.nio.charset.Charset;
@@ -34,8 +36,7 @@ public class JSONTest {
     @Test
     public void serializeCategory() throws Exception {
         ObjectMapper mapper = new ObjectMapper();
-        PassData.PassCategory passCategory = new PassData.PassCategory();
-        passCategory.categoryName = "Category 1";
+        PassCategoryDTO passCategory = new PassCategoryDTO("Category 1", null);
         String json = mapper.writeValueAsString(passCategory);
         System.out.println("Json for category:" + json);
     }
@@ -45,7 +46,7 @@ public class JSONTest {
         String categoryString = "{\"categoryName\":\"Category 1\",\"parentCategory\":null}";
         ObjectMapper mapper = new ObjectMapper();
 
-        PassData.PassCategory category = mapper.readValue(categoryString, PassData.PassCategory.class);
+        PassCategoryDTO category = mapper.readValue(categoryString, PassCategoryDTO.class);
         assertThat(category.categoryName).isEqualTo("Category 1");
     }
 
@@ -55,9 +56,9 @@ public class JSONTest {
         String json = new String(encodedJson, Charset.defaultCharset());
 
         ObjectMapper mapper = new ObjectMapper();
-        PassData passData = mapper.readValue(json, PassData.class);
-        assertThat(passData.passCategoryList.length).isEqualTo(4);
-        assertThat(passData.passNoteList.length).isEqualTo(7);
+        PassDataDTO passData = mapper.readValue(json, PassDataDTO.class);
+        assertThat(passData.passCategoryList.size()).isEqualTo(4);
+        assertThat(passData.passNoteList.size()).isEqualTo(7);
     }
 
     static abstract class TestMixin {
