@@ -7,9 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 /**
  * PassData request class for v2 API
  */
-public class PassDataGetRequest implements PasswordProvider {
-    @JsonProperty("fileName")
-    private final String fileName;
+public class PassDataGetRequest extends PassDataFileRequest implements PasswordProvider {
 
     @JsonProperty("password")
     private final String password;
@@ -25,12 +23,8 @@ public class PassDataGetRequest implements PasswordProvider {
             String fileName,
             @JsonProperty("password")
             String password) {
-        this.fileName = fileName;
+        super(fileName);
         this.password = password;
-    }
-
-    public String getFileName() {
-        return fileName;
     }
 
     public String getPassword() {
@@ -40,7 +34,7 @@ public class PassDataGetRequest implements PasswordProvider {
     @Override
     public String toString() {
         return "PassDataGetRequest{" +
-                "fileName='" + fileName + '\'' +
+                "fileName='" + getFileName() + '\'' +
                 ", password='" + password + '\'' +
                 '}';
     }

@@ -238,4 +238,32 @@ public class PassDataControllerV2Test extends BaseControllerMockMvcTest {
 
         }, "PassDataControllerV2NewPassData.log");
     }
+
+    @Test
+    void testFileInfo() throws Exception {
+        runLogged(()-> {
+
+            addResult(this.mvc.perform(MockMvcRequestBuilders.post("/v2/passdata/fileinfo")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .characterEncoding(StandardCharsets.UTF_8.name())
+                    .content(mapper.writeValueAsString(new PassDataFileRequest(DATA_FILE_NAME)))
+                    .accept(MediaType.APPLICATION_JSON_VALUE))
+                    .andExpect(MockMvcResultMatchers.status().isOk())
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.exists").value(true))
+                    .andReturn()
+            );
+
+            addResult(this.mvc.perform(MockMvcRequestBuilders.post("/v2/passdata/fileinfo")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .characterEncoding(StandardCharsets.UTF_8.name())
+                    .content(mapper.writeValueAsString(new PassDataFileRequest(DATA_FILE_NAME + "6tfd")))
+                    .accept(MediaType.APPLICATION_JSON_VALUE))
+                    .andExpect(MockMvcResultMatchers.status().isOk())
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.exists").value(false))
+                    .andReturn()
+            );
+
+
+        }, "PassDataControllerV2GetFileInfo.log");
+    }
 }
