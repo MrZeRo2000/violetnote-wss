@@ -260,6 +260,29 @@ public class PassDataControllerV2Test extends BaseControllerMockMvcTest {
                     .accept(MediaType.APPLICATION_JSON_VALUE))
                     .andExpect(MockMvcResultMatchers.status().isOk())
                     .andExpect(MockMvcResultMatchers.jsonPath("$.exists").value(false))
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.valid").value(true))
+                    .andReturn()
+            );
+
+            addResult(this.mvc.perform(MockMvcRequestBuilders.post("/v2/passdata/fileinfo")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .characterEncoding(StandardCharsets.UTF_8.name())
+                    .content(mapper.writeValueAsString(new PassDataFileRequest("5: 6tfd")))
+                    .accept(MediaType.APPLICATION_JSON_VALUE))
+                    .andExpect(MockMvcResultMatchers.status().isOk())
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.errorCode")
+                            .value(HttpStatus.INTERNAL_SERVER_ERROR.value()))
+                    .andReturn()
+            );
+
+            addResult(this.mvc.perform(MockMvcRequestBuilders.post("/v2/passdata/fileinfo")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .characterEncoding(StandardCharsets.UTF_8.name())
+                    .content(mapper.writeValueAsString(new PassDataFileRequest("F:\\444 ")))
+                    .accept(MediaType.APPLICATION_JSON_VALUE))
+                    .andExpect(MockMvcResultMatchers.status().isOk())
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.errorCode")
+                            .value(HttpStatus.INTERNAL_SERVER_ERROR.value()))
                     .andReturn()
             );
 

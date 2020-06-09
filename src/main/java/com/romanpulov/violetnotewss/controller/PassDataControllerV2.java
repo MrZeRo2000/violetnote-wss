@@ -11,6 +11,7 @@ import com.romanpulov.violetnotewss.model.PassDataFileRequest;
 import com.romanpulov.violetnotewss.model.PassDataGetRequest;
 import com.romanpulov.violetnotewss.model.PassDataPersistRequest;
 import com.romanpulov.violetnotewss.services.PassDataManagementService;
+import com.romanpulov.violetnotewss.utils.FileUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -64,8 +65,12 @@ public class PassDataControllerV2 {
     }
 
     @PostMapping("/fileinfo")
-    ResponseEntity<PassDataFileInfo> getPassDataFileInfo(@RequestBody PassDataFileRequest fileRequest) {
+    ResponseEntity<PassDataFileInfo> getPassDataFileInfo(@RequestBody PassDataFileRequest fileRequest)
+            throws PassDataFileWriteException{
         String fileName = fileRequest.getFileName();
-        return ResponseEntity.ok(new PassDataFileInfo(fileName, Files.exists(Paths.get(fileName))));
+        boolean fileExists = FileUtils.fileExists(fileName);
+        boolean fileValid = fileExists || FileUtils.fileValid(fileName);
+
+        return ResponseEntity.ok(new PassDataFileInfo(fileName, fileExists, fileValid));
     }
 }

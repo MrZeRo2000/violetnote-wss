@@ -57,7 +57,7 @@ public class PassDataController {
     public PassDataFileInfo getDataFileInfo() {
         String fileName = passDataFileManagementService.getPassDataFileName();
         File f = new File(fileName);
-        return new PassDataFileInfo(fileName, f.exists());
+        return new PassDataFileInfo(fileName, f.exists(), true);
     }
 
     @RequestMapping(
