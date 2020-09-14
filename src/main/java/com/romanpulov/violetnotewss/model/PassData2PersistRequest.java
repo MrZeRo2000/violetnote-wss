@@ -2,33 +2,32 @@ package com.romanpulov.violetnotewss.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.romanpulov.violetnotecore.Model.PassData;
 
-public class PassDataPersistRequest extends PassDataGetRequest {
+public class PassData2PersistRequest extends PassDataGetRequest {
     @JsonProperty("passData")
-    private final PassDataDTO passData;
+    private final PassData2DTO passData2;
 
     @JsonCreator
-    public PassDataPersistRequest(
+    public PassData2PersistRequest(
             @JsonProperty("fileName")
-            String fileName,
+                    String fileName,
             @JsonProperty("password")
-            String password,
+                    String password,
             @JsonProperty("passData")
-            PassDataDTO passData
+                    PassData2DTO passData2
     ) {
         super(fileName, password);
-        this.passData = passData;
+        this.passData2 = passData2;
     }
 
-    public PassDataDTO getPassData() {
-        return passData;
+    public PassData2DTO getPassData() {
+        return passData2;
     }
 
     @Override
     public String toString() {
-        return "PassDataPersistRequest{" +
-                "passData='" + passData + '\'' +
+        return "PassData2PersistRequest{" +
+                "passData='" + passData2 + '\'' +
                 ", fileName='" + getFileName() + '\'' +
                 ", password='" + getPassword() + '\'' +
                 '}';
