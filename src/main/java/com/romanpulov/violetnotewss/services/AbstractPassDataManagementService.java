@@ -1,21 +1,45 @@
 package com.romanpulov.violetnotewss.services;
 
 import com.romanpulov.jutilscore.io.FileUtils;
+import com.romanpulov.violetnotecore.AESCrypt.AESCryptException;
+import com.romanpulov.violetnotecore.Processor.Exception.DataReadWriteException;
 import com.romanpulov.violetnotewss.exception.PassDataFileNotFoundException;
 import com.romanpulov.violetnotewss.exception.PassDataFileReadException;
 import com.romanpulov.violetnotewss.exception.PassDataFileWriteException;
 import com.romanpulov.violetnotewss.model.PasswordProvider;
 
-import java.io.File;
+import java.io.*;
 
 public abstract class AbstractPassDataManagementService<D> {
 
-    protected abstract D readPassDataInternal(PasswordProvider passwordProvider, File f)
-            throws PassDataFileReadException;
+    protected abstract D readPassDataFromStream(PasswordProvider passwordProvider, InputStream inputStream)
+            throws AESCryptException, DataReadWriteException, IOException;
 
-    protected abstract void savePassDataInternal(PasswordProvider passwordProvider, File f, D passData)
-            throws PassDataFileWriteException;
+    protected abstract void writePassDataToStream(PasswordProvider passwordProvider, OutputStream outputStream, D data)
+            throws AESCryptException, DataReadWriteException, IOException;
 
+    protected D readPassDataFromFile(PasswordProvider passwordProvider, File f)
+            throws PassDataFileReadException {
+        try (InputStream inputStream = new FileInputStream(f)) {
+            return readPassDataFromStream(passwordProvider, inputStream);
+        } catch (AESCryptException | IOException | DataReadWriteException e) {
+            e.printStackTrace();
+            if (e instanceof IOException) {
+                throw new PassDataFileReadException("Data file read error: " + e.getMessage());
+            } else
+                throw new PassDataFileReadException("Data decryption error: " + e.getMessage());
+        }
+    };
+
+    protected void savePassDataToFile(PasswordProvider passwordProvider, File f, D passData)
+            throws PassDataFileWriteException {
+        try (OutputStream outputStream = new FileOutputStream(f)) {
+            writePassDataToStream(passwordProvider, outputStream, passData);
+        } catch (AESCryptException | IOException | DataReadWriteException e) {
+            e.printStackTrace();
+            throw new PassDataFileWriteException("Data file write error:" + e.getMessage());
+        }
+    }
 
     public D readPassData(PasswordProvider passwordProvider, String fileName)
             throws PassDataFileNotFoundException, PassDataFileReadException {
@@ -33,7 +57,7 @@ public abstract class AbstractPassDataManagementService<D> {
             throw new PassDataFileReadException("No password");
         }
 
-        return readPassDataInternal(passwordProvider, file);
+        return readPassDataFromFile(passwordProvider, file);
     }
 
     public void savePassData(PasswordProvider passwordProvider, String fileName, D passData)
@@ -45,7 +69,7 @@ public abstract class AbstractPassDataManagementService<D> {
         File tempFile = new File(FileUtils.getTempFileName(f.getPath()));
 
         // saving data to a temporary file
-        savePassDataInternal(passwordProvider, tempFile, passData);
+        savePassDataToFile(passwordProvider, tempFile, passData);
 
         //roll backup files
         if (!FileUtils.saveCopies(f.getPath()))
@@ -67,6 +91,6 @@ public abstract class AbstractPassDataManagementService<D> {
         }
 
         // saving file
-        savePassDataInternal(passwordProvider, f, passData);
+        savePassDataToFile(passwordProvider, f, passData);
     }
 }
