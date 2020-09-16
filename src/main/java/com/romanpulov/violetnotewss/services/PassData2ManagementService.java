@@ -5,12 +5,12 @@ import com.romanpulov.violetnotecore.Model.PassData2;
 import com.romanpulov.violetnotecore.Processor.Exception.DataReadWriteException;
 import com.romanpulov.violetnotecore.Service.PassData2ReaderServiceV2;
 import com.romanpulov.violetnotecore.Service.PassData2WriterServiceV2;
-import com.romanpulov.violetnotewss.exception.PassDataFileReadException;
-import com.romanpulov.violetnotewss.exception.PassDataFileWriteException;
 import com.romanpulov.violetnotewss.model.PasswordProvider;
+import org.springframework.stereotype.Service;
 
 import java.io.*;
 
+@Service
 public class PassData2ManagementService extends AbstractPassDataManagementService<PassData2> {
 
     @Override
