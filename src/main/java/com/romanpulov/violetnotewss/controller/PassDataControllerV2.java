@@ -5,21 +5,17 @@ import com.romanpulov.violetnotewss.exception.PassDataFileNotFoundException;
 import com.romanpulov.violetnotewss.exception.PassDataFileReadException;
 import com.romanpulov.violetnotewss.exception.PassDataFileWriteException;
 import com.romanpulov.violetnotewss.mapper.PassDataDTOMapper;
-import com.romanpulov.violetnotewss.mapper.PassNoteDTOMapper;
 import com.romanpulov.violetnotewss.model.PassDataFileInfo;
 import com.romanpulov.violetnotewss.model.PassDataFileRequest;
 import com.romanpulov.violetnotewss.model.PassDataGetRequest;
 import com.romanpulov.violetnotewss.model.PassDataPersistRequest;
+import com.romanpulov.violetnotewss.services.PassDataFileInfoService;
 import com.romanpulov.violetnotewss.services.PassDataManagementService;
-import com.romanpulov.violetnotewss.utils.FileUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 @RestController
 @RequestMapping("/v2/passdata")
@@ -67,10 +63,6 @@ public class PassDataControllerV2 {
     @PostMapping("/fileinfo")
     ResponseEntity<PassDataFileInfo> getPassDataFileInfo(@RequestBody PassDataFileRequest fileRequest)
             throws PassDataFileWriteException{
-        String fileName = fileRequest.getFileName();
-        boolean fileExists = FileUtils.fileExists(fileName);
-        boolean fileValid = fileExists || FileUtils.fileValid(fileName);
-
-        return ResponseEntity.ok(new PassDataFileInfo(fileName, fileExists, fileValid));
+        return ResponseEntity.ok(PassDataFileInfoService.getPassDataFileInfo(fileRequest.getFileName()));
     }
 }
