@@ -6,17 +6,16 @@ import org.springframework.stereotype.Component;
 
 import java.util.stream.Collectors;
 
-@Component
 public class PassData2DTOMapper {
-    private final PassCategory2DTOMapper passCategory2DTOMapper;
-
-    public PassData2DTOMapper(PassCategory2DTOMapper passCategory2DTOMapper) {
-        this.passCategory2DTOMapper = passCategory2DTOMapper;
+    public static PassData2 dtoToCore(PassData2DTO dto) {
+        return new PassData2(
+                dto.passCategoryList.stream().map(PassCategory2DTOMapper::dtoToCore).collect(Collectors.toList())
+        );
     }
 
-    public PassData2 dtoToCore(PassData2DTO dto) {
-        return new PassData2(
-                dto.passCategoryList.stream().map(passCategory2DTOMapper::dtoToCore).collect(Collectors.toList())
+    public static PassData2DTO coreToDTO(PassData2 core) {
+        return new PassData2DTO(
+                core.getCategoryList().stream().map(PassCategory2DTOMapper::coreToDTO).collect(Collectors.toList())
         );
     }
 }

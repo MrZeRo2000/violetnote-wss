@@ -9,14 +9,14 @@ public class PassCategory2DTO {
     @JsonProperty("categoryName")
     public final String categoryName;
 
-    @JsonProperty("passNoteList")
+    @JsonProperty("noteList")
     public final List<PassNote2DTO> passNote2List;
 
     @JsonCreator
     public PassCategory2DTO(
             @JsonProperty("categoryName")
                     String categoryName,
-            @JsonProperty("passNoteList")
+            @JsonProperty("noteList")
                     List<PassNote2DTO> passNote2List
     ) {
         this.categoryName = categoryName;
@@ -27,7 +27,7 @@ public class PassCategory2DTO {
     public String toString() {
         return "PassCategory2DTO{" +
                 "categoryName='" + categoryName + '\'' +
-                ", passNote2List=" + passNote2List +
+                ", note2List=" + passNote2List +
                 '}';
     }
 }

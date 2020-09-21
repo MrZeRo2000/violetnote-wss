@@ -1,12 +1,9 @@
 package com.romanpulov.violetnotewss;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.romanpulov.violetnotecore.Model.PassCategory;
 import com.romanpulov.violetnotewss.model.*;
-import org.assertj.core.util.Arrays;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
@@ -85,7 +82,7 @@ public class PassDataControllerV2Test extends BaseControllerMockMvcTest {
         }, "PassDataControllerV2GetPassData.log");
     }
 
-    private PassDataDTO getTestPassData() {
+    private PassDataDTO generateTestPassData() {
         PassCategoryDTO passCategoryDTO = new PassCategoryDTO("New Category", null);
         PassCategoryDTO passCategoryEmptyDTO = new PassCategoryDTO("Empty Category", null);
         PassNoteDTO passNoteDTO = new PassNoteDTO(passCategoryDTO, "system", "user",
@@ -134,7 +131,7 @@ public class PassDataControllerV2Test extends BaseControllerMockMvcTest {
             Assertions.assertEquals(4, passData.passCategoryList.size());
             Assertions.assertEquals(7, passData.passNoteList.size());
 
-            PassDataDTO passDataDTO = getTestPassData();
+            PassDataDTO passDataDTO = generateTestPassData();
 
             PassDataPersistRequest pr = new PassDataPersistRequest(testFileName, DATA_FILE_PASSWORD, passDataDTO);
 
@@ -185,7 +182,7 @@ public class PassDataControllerV2Test extends BaseControllerMockMvcTest {
         String testNewFileName = testFileFolder + "/test_file_new.vnf";
         Files.copy(Paths.get(DATA_FILE_NAME), Paths.get(testFileName));
 
-        PassDataDTO passDataDTO = getTestPassData();
+        PassDataDTO passDataDTO = generateTestPassData();
 
         runLogged(() -> {
 
