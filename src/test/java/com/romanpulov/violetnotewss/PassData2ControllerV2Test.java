@@ -2,10 +2,7 @@ package com.romanpulov.violetnotewss;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.romanpulov.violetnotecore.Model.PassData2;
-import com.romanpulov.violetnotewss.model.PassCategory2DTO;
-import com.romanpulov.violetnotewss.model.PassData2DTO;
-import com.romanpulov.violetnotewss.model.PassDataGetRequest;
-import com.romanpulov.violetnotewss.model.PassNote2DTO;
+import com.romanpulov.violetnotewss.model.*;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -36,7 +33,7 @@ public class PassData2ControllerV2Test extends BaseControllerMockMvcTest {
     }
 
     @Test
-    void testGetPassData() throws Exception {
+    void testGetPassData2() throws Exception {
         runLogged(() -> {
             addResult(this.mvc.perform(MockMvcRequestBuilders.post("/v2/passdata2")
                     .contentType(MediaType.APPLICATION_JSON)
@@ -108,7 +105,7 @@ public class PassData2ControllerV2Test extends BaseControllerMockMvcTest {
     }
 
     @Test
-    void testSavePassData() throws Exception {
+    void testSavePassData2() throws Exception {
         String testFilePath = "test_save_pass_data_2";
         String testFileFolder = prepareTempDirFolder(testFilePath);
         String testFileName = testFileFolder + "/test_file_2.vnf";
@@ -147,7 +144,149 @@ public class PassData2ControllerV2Test extends BaseControllerMockMvcTest {
             Assertions.assertEquals(4, passData2DTO.passCategoryList.size());
             Assertions.assertEquals(7, passData2DTO.passCategoryList.stream().mapToInt(value -> value.passNote2List.size()).sum());
 
+            passData2DTO = generateTestPassData2();
+
+            PassData2PersistRequest pr = new PassData2PersistRequest(testFileName, DATA_FILE_PASSWORD, passData2DTO);
+
+            addResult(this.mvc.perform(MockMvcRequestBuilders.post("/v2/passdata2/edit")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .characterEncoding(StandardCharsets.UTF_8.name())
+                    .content(mapper.writeValueAsString(pr))
+                    .accept(MediaType.APPLICATION_JSON_VALUE))
+                    .andExpect(MockMvcResultMatchers.status().isOk())
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.errorCode").doesNotExist())
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.categoryList").isArray())
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.categoryList", Matchers.hasSize(2)))
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.categoryList[0].categoryName")
+                            .value(passData2DTO.passCategoryList.get(0).categoryName))
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.categoryList[0].noteList").isArray())
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.categoryList[0].noteList", Matchers.hasSize(1)))
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.categoryList[0].noteList[0].system")
+                            .value(passData2DTO.passCategoryList.get(0).passNote2List.get(0).system))
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.categoryList[0].noteList[0].user")
+                            .value(passData2DTO.passCategoryList.get(0).passNote2List.get(0).user))
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.categoryList[0].noteList[0].password")
+                            .value(passData2DTO.passCategoryList.get(0).passNote2List.get(0).password))
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.categoryList[0].noteList[0].url")
+                            .value(passData2DTO.passCategoryList.get(0).passNote2List.get(0).url))
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.categoryList[0].noteList[0].info")
+                            .value(passData2DTO.passCategoryList.get(0).passNote2List.get(0).info))
+                    .andReturn()
+            );
+
         }, "PassData2ControllerV2SavePassData.log");
+
+        Assertions.assertEquals(2, Files.list(Paths.get(testFileFolder)).count());
+        Assertions.assertEquals(1,
+                Files.list(Paths.get(testFileFolder)).filter(path -> path.toString().endsWith("bak01")).count());
+    }
+
+    @Test
+    void testNewPassData2() throws Exception {
+        String testFilePath = "test_new_pass_data_2";
+        String testFileFolder = prepareTempDirFolder(testFilePath);
+        String testFileName = testFileFolder + "/test_file_2.vnf";
+        String testNewFileName = testFileFolder + "/test_file_2_new.vnf";
+        Files.copy(Paths.get(DATA_2_FILE_NAME), Paths.get(testFileName));
+
+        PassData2DTO passData2DTO = generateTestPassData2();
+
+        runLogged(() -> {
+            addResult(this.mvc.perform(MockMvcRequestBuilders.post("/v2/passdata2/new")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .characterEncoding(StandardCharsets.UTF_8.name())
+                    .content(mapper.writeValueAsString(new PassData2PersistRequest(testFileName, DATA_FILE_PASSWORD, passData2DTO)))
+                    .accept(MediaType.APPLICATION_JSON_VALUE))
+                    .andExpect(MockMvcResultMatchers.status().isOk())
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.errorCode")
+                            .value(HttpStatus.INTERNAL_SERVER_ERROR.value()))
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.errorMessage")
+                            .value(Matchers.startsWith("Error writing new file: the file already exist")))
+                    .andReturn()
+            );
+
+            addResult(this.mvc.perform(MockMvcRequestBuilders.post("/v2/passdata2/new")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .characterEncoding(StandardCharsets.UTF_8.name())
+                    .content(mapper.writeValueAsString(new PassData2PersistRequest(testNewFileName, DATA_FILE_PASSWORD, passData2DTO)))
+                    .accept(MediaType.APPLICATION_JSON_VALUE))
+                    .andExpect(MockMvcResultMatchers.status().isOk())
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.errorCode")
+                            .doesNotExist())
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.errorMessage")
+                            .doesNotExist())
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.categoryList").isArray())
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.categoryList", Matchers.hasSize(2)))
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.categoryList[0].categoryName")
+                            .value(passData2DTO.passCategoryList.get(0).categoryName))
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.categoryList[0].noteList").isArray())
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.categoryList[0].noteList", Matchers.hasSize(1)))
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.categoryList[0].noteList[0].system")
+                            .value(passData2DTO.passCategoryList.get(0).passNote2List.get(0).system))
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.categoryList[0].noteList[0].user")
+                            .value(passData2DTO.passCategoryList.get(0).passNote2List.get(0).user))
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.categoryList[0].noteList[0].password")
+                            .value(passData2DTO.passCategoryList.get(0).passNote2List.get(0).password))
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.categoryList[0].noteList[0].url")
+                            .value(passData2DTO.passCategoryList.get(0).passNote2List.get(0).url))
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.categoryList[0].noteList[0].info")
+                            .value(passData2DTO.passCategoryList.get(0).passNote2List.get(0).info))
+                    .andReturn()
+            );
+
+        }, "PassData2ControllerV2NewPassData.log");
+
+    }
+
+    @Test
+    void testFileInfo2() throws Exception {
+        runLogged(()-> {
+
+            addResult(this.mvc.perform(MockMvcRequestBuilders.post("/v2/passdata2/fileinfo")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .characterEncoding(StandardCharsets.UTF_8.name())
+                    .content(mapper.writeValueAsString(new PassDataFileRequest(DATA_2_FILE_NAME)))
+                    .accept(MediaType.APPLICATION_JSON_VALUE))
+                    .andExpect(MockMvcResultMatchers.status().isOk())
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.exists").value(true))
+                    .andReturn()
+            );
+
+            addResult(this.mvc.perform(MockMvcRequestBuilders.post("/v2/passdata2/fileinfo")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .characterEncoding(StandardCharsets.UTF_8.name())
+                    .content(mapper.writeValueAsString(new PassDataFileRequest(DATA_2_FILE_NAME + "6tfd")))
+                    .accept(MediaType.APPLICATION_JSON_VALUE))
+                    .andExpect(MockMvcResultMatchers.status().isOk())
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.exists").value(false))
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.valid").value(true))
+                    .andReturn()
+            );
+
+            addResult(this.mvc.perform(MockMvcRequestBuilders.post("/v2/passdata2/fileinfo")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .characterEncoding(StandardCharsets.UTF_8.name())
+                    .content(mapper.writeValueAsString(new PassDataFileRequest("5: 6tfd")))
+                    .accept(MediaType.APPLICATION_JSON_VALUE))
+                    .andExpect(MockMvcResultMatchers.status().isOk())
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.errorCode")
+                            .value(HttpStatus.INTERNAL_SERVER_ERROR.value()))
+                    .andReturn()
+            );
+
+            addResult(this.mvc.perform(MockMvcRequestBuilders.post("/v2/passdata2/fileinfo")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .characterEncoding(StandardCharsets.UTF_8.name())
+                    .content(mapper.writeValueAsString(new PassDataFileRequest("F:\\444 ")))
+                    .accept(MediaType.APPLICATION_JSON_VALUE))
+                    .andExpect(MockMvcResultMatchers.status().isOk())
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.errorCode")
+                            .value(HttpStatus.INTERNAL_SERVER_ERROR.value()))
+                    .andReturn()
+            );
+
+
+        }, "PassData2ControllerV2GetFileInfo.log");
     }
 
 }
