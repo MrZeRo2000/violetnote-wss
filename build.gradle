@@ -22,8 +22,8 @@ targetCompatibility = 1.8
 description = """violetnote-wss Webapp"""
 
 repositories {
-    jcenter()
-    //for violetnote-core
+    mavenCentral()
+    //for violetnote-core, jcore-utils
     mavenLocal()
 }
 
@@ -32,8 +32,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-aop'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
-    implementation 'com.romanpulov:jutils-core:0.2'
-    implementation 'com.romanpulov:violetnote-core:2.0.5'
+    implementation 'com.romanpulov:jutils-core:0.3.11'
+    implementation 'com.romanpulov:violetnote-core:2.0.7'
 
     providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
 
