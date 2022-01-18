@@ -1,0 +1,1 @@
+[Environment]::SetEnvironmentVariable("JAVA_HOME", "C:/WinApp/jdk-12.0.2")
