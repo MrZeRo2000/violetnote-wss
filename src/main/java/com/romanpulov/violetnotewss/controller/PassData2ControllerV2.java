@@ -9,11 +9,9 @@ import com.romanpulov.violetnotewss.model.*;
 import com.romanpulov.violetnotewss.services.PassData2ManagementService;
 import com.romanpulov.violetnotewss.services.PassDataFileInfoService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/v2/passdata2")
 public class PassData2ControllerV2 {

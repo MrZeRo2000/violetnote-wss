@@ -22,7 +22,7 @@ processResources {
 }
 
 group = 'com.romanpulov'
-version = '1.6.2'
+version = '1.6.3'
 sourceCompatibility = '11'
 
 description = """violetnote-wss Webapp"""
