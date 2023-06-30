@@ -21,12 +21,12 @@ public class PassDataControllerTest extends BaseApplicationTest {
 
     @Override
     protected String getBaseUrl() {
-        return super.getBaseUrl() + "passdata/";
+        return super.getBaseUrl() + "passdata";
     }
 
     @Test
     public void restPassDataCheckPassword() {
-        String url = getBaseUrl() + "password";
+        String url = getBaseUrl() + "/password";
 
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode passwordNode = mapper.createObjectNode();
@@ -46,7 +46,7 @@ public class PassDataControllerTest extends BaseApplicationTest {
     @Test
     public void fileName() {
         assertThat(context.getInitParameter(PassDataFileManagementService.PASS_DATA_FILE_NAME_PARAM_NAME)).isEqualTo("data/test1.vnf");
-        String fileNameResult = this.restTemplate.getForObject(getBaseUrl() + "filename", String.class);
+        String fileNameResult = this.restTemplate.getForObject(getBaseUrl() + "/filename", String.class);
         assertThat(fileNameResult).contains("file exists:true");
     }
 

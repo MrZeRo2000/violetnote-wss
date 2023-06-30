@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Context>
+	<Parameter name="pass-data-file-name" value="C:\Users\r1525\OneDrive\VioletNote\MyPins2.vnf"/>
+        <Parameter name="pass-data-file-name-test" value="/pins/1.txt"/>
+	<Parameter name="pass-data-downloaded_file-name" value="test1_downloaded.vnf"/>
+	<Parameter name="pass-data-dropbox_file-name" value="/Temp/test1.vnf"/>
+</Context>

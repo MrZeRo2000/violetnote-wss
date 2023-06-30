@@ -3,7 +3,7 @@ package com.romanpulov.violetnotewss.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.ServletContext;
+import jakarta.servlet.ServletContext;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
