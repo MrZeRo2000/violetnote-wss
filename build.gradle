@@ -58,7 +58,7 @@ ext {
 	} else if (project.file('../apache-tomcat-10.1.10/').exists()) {
 		tomcat_webapps = '../apache-tomcat-10.1.10/webapps'
     } else {
-        tomcat_webapps = 'D:/prj/apache-tomcat-9.0.24/webapps'
+        tomcat_webapps = 'D:/prj/apache-tomcat-10.1.10/webapps'
     }
 }
 
