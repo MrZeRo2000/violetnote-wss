@@ -22,8 +22,7 @@ processResources {
 }
 
 group = 'com.romanpulov'
-version = '1.7.1'
-sourceCompatibility = '17'
+version = '1.7.2'
 
 description = """violetnote-wss Webapp"""
 
@@ -38,8 +37,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-aop'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
-    implementation 'com.romanpulov:jutils-core:0.4.0'
-    implementation 'com.romanpulov:violetnote-core:2.1.0'
+    implementation 'com.romanpulov:jutils-core:0.4.1'
+    implementation 'com.romanpulov:violetnote-core:2.1.1'
 
     providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
 
