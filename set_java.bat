@@ -1,1 +1,0 @@
-set java_home=C:/WinApp/jdk-12.0.2
