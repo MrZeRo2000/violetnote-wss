@@ -52,8 +52,7 @@ public class PassDataControllerV2 {
             throws PassDataFileNotFoundException, PassDataFileReadException, PassDataFileWriteException
     {
         // write the data
-        passDataManagementService.newPassData(persistRequest, persistRequest.getFileName(),
-                passDataDTOMapper.dtoToCore(persistRequest.getPassData()));
+        passDataManagementService.newPassData(persistRequest, persistRequest.getFileName());
         // read and return
         return ResponseEntity.ok(passDataManagementService.readPassData(persistRequest, persistRequest.getFileName()));
     }

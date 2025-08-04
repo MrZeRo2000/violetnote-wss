@@ -1,6 +1,5 @@
 package com.romanpulov.violetnotewss.controller;
 
-import com.romanpulov.violetnotecore.Model.PassData2;
 import com.romanpulov.violetnotewss.exception.PassDataFileNotFoundException;
 import com.romanpulov.violetnotewss.exception.PassDataFileReadException;
 import com.romanpulov.violetnotewss.exception.PassDataFileWriteException;
@@ -48,8 +47,7 @@ public class PassData2ControllerV2 {
     ResponseEntity<PassData2DTO> newPassData(@RequestBody PassData2PersistRequest persistRequest)
             throws PassDataFileNotFoundException, PassDataFileReadException, PassDataFileWriteException {
         // write the data
-        passData2ManagementService.newPassData(persistRequest, persistRequest.getFileName(),
-                PassData2DTOMapper.dtoToCore(persistRequest.getPassData()));
+        passData2ManagementService.newPassData(persistRequest, persistRequest.getFileName());
         // read and return
         return ResponseEntity.ok(PassData2DTOMapper.coreToDTO(
                 passData2ManagementService.readPassData(persistRequest, persistRequest.getFileName()))

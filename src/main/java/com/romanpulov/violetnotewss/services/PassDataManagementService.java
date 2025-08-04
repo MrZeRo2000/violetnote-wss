@@ -1,17 +1,16 @@
 package com.romanpulov.violetnotewss.services;
 
+import com.romanpulov.violetnotecore.Model.*;
 import com.romanpulov.violetnotecore.Processor.FilePassDataReaderV1;
 import com.romanpulov.violetnotecore.Processor.FilePassDataWriterV1;
-import com.romanpulov.violetnotewss.exception.PassDataFileReadException;
 
 import com.romanpulov.violetnotecore.AESCrypt.AESCryptException;
-import com.romanpulov.violetnotecore.Model.PassData;
 import com.romanpulov.violetnotecore.Processor.Exception.DataReadWriteException;
-import com.romanpulov.violetnotewss.exception.PassDataFileWriteException;
 import com.romanpulov.violetnotewss.model.PasswordProvider;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
+import java.util.List;
 
 @Service
 public class PassDataManagementService extends AbstractPassDataManagementService<PassData> {
@@ -28,5 +27,27 @@ public class PassDataManagementService extends AbstractPassDataManagementService
             throws AESCryptException, DataReadWriteException, IOException {
         FilePassDataWriterV1 writerV1 = new FilePassDataWriterV1(outputStream, passwordProvider.getPassword(), data);
         writerV1.writeFile();
+    }
+
+    @Override
+    protected PassData createNewPassData() {
+        PassCategory passCategory = new PassCategory("New Category");
+
+        PassNote passNote = new PassNote(
+                passCategory,
+                "New System",
+                "New User",
+                "New Password",
+                "New Comments",
+                "New Custom",
+                "New Info"
+        );
+
+        PassData passData = new PassData();
+        passData.setPassCategoryList(List.of(passCategory));
+        passData.setPassNoteList(List.of(passNote));
+
+        return passData;
+
     }
 }

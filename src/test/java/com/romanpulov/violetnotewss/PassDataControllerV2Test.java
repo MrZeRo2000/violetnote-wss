@@ -15,9 +15,12 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class PassDataControllerV2Test extends BaseControllerMockMvcTest {
@@ -168,10 +171,15 @@ public class PassDataControllerV2Test extends BaseControllerMockMvcTest {
 
         }, "PassDataControllerV2SavePassData.log");
 
-        Assertions.assertEquals(2, Files.list(Paths.get(testFileFolder)).count());
-        Assertions.assertEquals(1,
-                Files.list(Paths.get(testFileFolder)).filter(path -> path.toString().endsWith("bak01")).count());
+        Path testPath = Paths.get(testFileFolder);
 
+        try(var fl = Files.list(testPath)) {
+            assertThat(fl.count()).isEqualTo(2);
+        }
+
+        try(var fl = Files.list(testPath)) {
+            assertThat(fl.filter(path -> path.toString().endsWith("bak01")).count()).isEqualTo(1);
+        }
     }
 
     @Test
@@ -182,14 +190,12 @@ public class PassDataControllerV2Test extends BaseControllerMockMvcTest {
         String testNewFileName = testFileFolder + "/test_file_new.vnf";
         Files.copy(Paths.get(DATA_FILE_NAME), Paths.get(testFileName));
 
-        PassDataDTO passDataDTO = generateTestPassData();
-
         runLogged(() -> {
 
             addResult(this.mvc.perform(MockMvcRequestBuilders.post("/v2/passdata/new")
                     .contentType(MediaType.APPLICATION_JSON)
                     .characterEncoding(StandardCharsets.UTF_8.name())
-                    .content(mapper.writeValueAsString(new PassDataPersistRequest(testFileName, DATA_FILE_PASSWORD, passDataDTO)))
+                    .content(mapper.writeValueAsString(new PassDataPersistRequest(testFileName, DATA_FILE_PASSWORD, null)))
                     .accept(MediaType.APPLICATION_JSON_VALUE))
                     .andExpect(MockMvcResultMatchers.status().isOk())
                     .andExpect(MockMvcResultMatchers.jsonPath("$.errorCode")
@@ -202,7 +208,7 @@ public class PassDataControllerV2Test extends BaseControllerMockMvcTest {
             addResult(this.mvc.perform(MockMvcRequestBuilders.post("/v2/passdata/new")
                     .contentType(MediaType.APPLICATION_JSON)
                     .characterEncoding(StandardCharsets.UTF_8.name())
-                    .content(mapper.writeValueAsString(new PassDataPersistRequest(testNewFileName, DATA_FILE_PASSWORD, passDataDTO)))
+                    .content(mapper.writeValueAsString(new PassDataPersistRequest(testNewFileName, DATA_FILE_PASSWORD, null)))
                     .accept(MediaType.APPLICATION_JSON_VALUE))
                     .andExpect(MockMvcResultMatchers.status().isOk())
                     .andExpect(MockMvcResultMatchers.jsonPath("$.errorCode")
@@ -212,24 +218,24 @@ public class PassDataControllerV2Test extends BaseControllerMockMvcTest {
                     .andExpect(MockMvcResultMatchers.jsonPath("$.passCategoryList").isArray())
                     .andExpect(MockMvcResultMatchers.jsonPath("$.passCategoryList", Matchers.hasSize(1)))
                     .andExpect(MockMvcResultMatchers.jsonPath("$.passCategoryList[0].categoryName")
-                            .value(passDataDTO.passCategoryList.get(0).categoryName))
+                            .value("New Category"))
                     .andExpect(MockMvcResultMatchers.jsonPath("$.passCategoryList[0].parentCategory").doesNotExist())
                     .andExpect(MockMvcResultMatchers.jsonPath("$.passNoteList").isArray())
                     .andExpect(MockMvcResultMatchers.jsonPath("$.passNoteList", Matchers.hasSize(1)))
                     .andExpect(MockMvcResultMatchers.jsonPath("$.passNoteList[0].passCategory.categoryName")
-                            .value(passDataDTO.passCategoryList.get(0).categoryName))
+                            .value("New Category"))
                     .andExpect(MockMvcResultMatchers.jsonPath("$.passNoteList[0].system")
-                            .value(passDataDTO.passNoteList.get(0).system))
+                            .value("New System"))
                     .andExpect(MockMvcResultMatchers.jsonPath("$.passNoteList[0].user")
-                            .value(passDataDTO.passNoteList.get(0).user))
+                            .value("New User"))
                     .andExpect(MockMvcResultMatchers.jsonPath("$.passNoteList[0].password")
-                            .value(passDataDTO.passNoteList.get(0).password))
+                            .value("New Password"))
                     .andExpect(MockMvcResultMatchers.jsonPath("$.passNoteList[0].comments")
-                            .value(passDataDTO.passNoteList.get(0).comments))
+                            .value("New Comments"))
                     .andExpect(MockMvcResultMatchers.jsonPath("$.passNoteList[0].custom")
-                            .value(passDataDTO.passNoteList.get(0).custom))
+                            .value("New Custom"))
                     .andExpect(MockMvcResultMatchers.jsonPath("$.passNoteList[0].info")
-                            .value(passDataDTO.passNoteList.get(0).info))
+                            .value("New Info"))
                     .andReturn()
             );
 

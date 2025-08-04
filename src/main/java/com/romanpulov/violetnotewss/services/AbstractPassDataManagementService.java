@@ -7,10 +7,13 @@ import com.romanpulov.violetnotewss.exception.PassDataFileNotFoundException;
 import com.romanpulov.violetnotewss.exception.PassDataFileReadException;
 import com.romanpulov.violetnotewss.exception.PassDataFileWriteException;
 import com.romanpulov.violetnotewss.model.PasswordProvider;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 
 public abstract class AbstractPassDataManagementService<D> {
+    private final static Logger logger = LoggerFactory.getLogger(AbstractPassDataManagementService.class);
 
     protected abstract D readPassDataFromStream(PasswordProvider passwordProvider, InputStream inputStream)
             throws AESCryptException, DataReadWriteException, IOException;
@@ -18,25 +21,27 @@ public abstract class AbstractPassDataManagementService<D> {
     protected abstract void writePassDataToStream(PasswordProvider passwordProvider, OutputStream outputStream, D data)
             throws AESCryptException, DataReadWriteException, IOException;
 
+    protected abstract D createNewPassData();
+
     protected D readPassDataFromFile(PasswordProvider passwordProvider, File f)
             throws PassDataFileReadException {
         try (InputStream inputStream = new FileInputStream(f)) {
             return readPassDataFromStream(passwordProvider, inputStream);
         } catch (AESCryptException | IOException | DataReadWriteException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage(), e);
             if (e instanceof IOException) {
                 throw new PassDataFileReadException("Data file read error: " + e.getMessage());
             } else
                 throw new PassDataFileReadException("Data decryption error: " + e.getMessage());
         }
-    };
+    }
 
     protected void savePassDataToFile(PasswordProvider passwordProvider, File f, D passData)
             throws PassDataFileWriteException {
         try (OutputStream outputStream = new FileOutputStream(f)) {
             writePassDataToStream(passwordProvider, outputStream, passData);
         } catch (AESCryptException | IOException | DataReadWriteException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage(), e);
             throw new PassDataFileWriteException("Data file write error:" + e.getMessage());
         }
     }
@@ -81,7 +86,7 @@ public abstract class AbstractPassDataManagementService<D> {
         }
     }
 
-    public void newPassData(PasswordProvider passwordProvider, String fileName, D passData)
+    public void newPassData(PasswordProvider passwordProvider, String fileName)
             throws PassDataFileWriteException {
         File f = new File(fileName);
 
@@ -90,7 +95,10 @@ public abstract class AbstractPassDataManagementService<D> {
             throw new PassDataFileWriteException("Error writing new file: the file already exists: " + f.getPath());
         }
 
+        // create new data
+        D newPassData = createNewPassData();
+
         // saving file
-        savePassDataToFile(passwordProvider, f, passData);
+        savePassDataToFile(passwordProvider, f, newPassData);
     }
 }
