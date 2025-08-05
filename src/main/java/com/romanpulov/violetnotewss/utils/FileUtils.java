@@ -1,7 +1,5 @@
 package com.romanpulov.violetnotewss.utils;
 
-import com.romanpulov.violetnotewss.exception.PassDataFileWriteException;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -12,7 +10,7 @@ public class FileUtils {
         return Files.exists(Paths.get(fileName));
     }
 
-    public static boolean fileValid(String fileName) throws PassDataFileWriteException {
+    public static boolean fileValid(String fileName) {
         if (FileUtils.fileExists(fileName)) {
             return true;
         } else {
@@ -23,7 +21,7 @@ public class FileUtils {
 
                 return true;
             } catch (IOException e) {
-                throw new PassDataFileWriteException(String.format("Error creating file: %s", e.getMessage()));
+                return false;
             }
         }
     }

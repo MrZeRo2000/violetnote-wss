@@ -22,7 +22,7 @@ processResources {
 }
 
 group = 'com.romanpulov'
-version = '1.7.8'
+version = '1.7.9'
 
 description = """violetnote-wss Webapp"""
 

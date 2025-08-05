@@ -55,8 +55,7 @@ public class PassData2ControllerV2 {
     }
 
     @PostMapping("/fileinfo")
-    ResponseEntity<PassDataFileInfo> getPassDataFileInfo(@RequestBody PassDataFileRequest fileRequest)
-            throws PassDataFileWriteException{
+    ResponseEntity<PassDataFileInfo> getPassDataFileInfo(@RequestBody PassDataFileRequest fileRequest) {
         return ResponseEntity.ok(PassDataFileInfoService.getPassDataFileInfo(fileRequest.getFileName()));
     }
 }
