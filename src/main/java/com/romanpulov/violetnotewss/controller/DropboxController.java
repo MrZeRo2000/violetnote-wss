@@ -1,7 +1,5 @@
 package com.romanpulov.violetnotewss.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.romanpulov.violetnotewss.model.AuthCode;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;

@@ -4,18 +4,16 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.romanpulov.violetnotewss.model.PassCategoryDTO;
 import com.romanpulov.violetnotewss.model.PassDataDTO;
 import org.junit.jupiter.api.Test;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.node.ObjectNode;
 
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -27,7 +25,7 @@ public class JSONTest {
 
     @Test
     public void objectMapperTest() {
-        ObjectMapper mapper = new ObjectMapper();
+        JsonMapper mapper = new JsonMapper();
         ObjectNode passwordNode = mapper.createObjectNode();
         passwordNode.put("password", "pass123");
         assertThat(passwordNode.toString()).isEqualTo("{\"password\":\"pass123\"}");
@@ -35,7 +33,7 @@ public class JSONTest {
 
     @Test
     public void serializeCategory() throws Exception {
-        ObjectMapper mapper = new ObjectMapper();
+        JsonMapper mapper = new JsonMapper();
         PassCategoryDTO passCategory = new PassCategoryDTO("Category 1", null);
         String json = mapper.writeValueAsString(passCategory);
         System.out.println("Json for category:" + json);
@@ -44,7 +42,7 @@ public class JSONTest {
     @Test
     public void dsCategory() throws Exception {
         String categoryString = "{\"categoryName\":\"Category 1\",\"parentCategory\":null}";
-        ObjectMapper mapper = new ObjectMapper();
+        JsonMapper mapper = new JsonMapper();
 
         PassCategoryDTO category = mapper.readValue(categoryString, PassCategoryDTO.class);
         assertThat(category.categoryName).isEqualTo("Category 1");
@@ -55,7 +53,7 @@ public class JSONTest {
         byte[] encodedJson = Files.readAllBytes(Paths.get("data/test1.json"));
         String json = new String(encodedJson, Charset.defaultCharset());
 
-        ObjectMapper mapper = new ObjectMapper();
+        JsonMapper mapper = new JsonMapper();
         PassDataDTO passData = mapper.readValue(json, PassDataDTO.class);
         assertThat(passData.passCategoryList.size()).isEqualTo(4);
         assertThat(passData.passNoteList.size()).isEqualTo(7);
@@ -83,12 +81,12 @@ public class JSONTest {
         TestClass tc = new TestClass();
         tc.x = 7;
 
-        ObjectMapper objectMapper = new ObjectMapper();
+        JsonMapper objectMapper = new JsonMapper();
         String json = objectMapper.writeValueAsString(tc);
-        assertThat(json).isEqualTo("{\"x\":7,\"attrs\":{\"Name1\":\"Value1\"}}");
+        assertThat(json).contains("\"x\":7");
+        assertThat(json).contains("\"attrs\":{\"Name1\":\"Value1\"}");
 
-        ObjectMapper mixinObjectMapper = new ObjectMapper();
-        mixinObjectMapper.addMixIn(TestClass.class, TestMixin.class);
+        JsonMapper mixinObjectMapper = JsonMapper.builder().addMixIn(TestClass.class, TestMixin.class).build();
         String jsonMixin = mixinObjectMapper.writeValueAsString(tc);
 
         assertThat(jsonMixin).isEqualTo("{\"a\":7}");
@@ -102,7 +100,7 @@ public class JSONTest {
     @Test
     public void missedClassMembers() throws Exception {
         String json = "{\"x\":7,\"attrs\":{\"Name1\":\"Value1\"},\"y\":43}";
-        ObjectMapper objectMapper = new ObjectMapper();
+        JsonMapper objectMapper = new JsonMapper();
         TestMissedClass tc = objectMapper.readValue(json, TestMissedClass.class);
 
         assertThat(7).isEqualTo(tc.x);
@@ -118,7 +116,7 @@ public class JSONTest {
     @Test
     public void parseDates() throws Exception {
         String json = "{\"x\":7,\"attrs\":{\"Name1\":\"Value1\"},\"server_modified\":\"2016-06-30T14:58:44Z\"}";
-        ObjectMapper objectMapper = new ObjectMapper();
+        JsonMapper objectMapper = new JsonMapper();
         TestParseDates tc = objectMapper.readValue(json, TestParseDates.class);
 
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");

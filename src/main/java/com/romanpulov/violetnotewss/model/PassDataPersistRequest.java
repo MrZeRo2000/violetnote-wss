@@ -2,7 +2,6 @@ package com.romanpulov.violetnotewss.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.romanpulov.violetnotecore.Model.PassData;
 
 public class PassDataPersistRequest extends PassDataGetRequest {
     @JsonProperty("passData")

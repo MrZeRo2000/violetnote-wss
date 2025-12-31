@@ -1,6 +1,5 @@
 package com.romanpulov.violetnotewss;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.romanpulov.violetnotewss.model.*;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
@@ -12,6 +11,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.web.context.WebApplicationContext;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -125,7 +125,7 @@ public class PassDataControllerV2Test extends BaseControllerMockMvcTest {
 
             addResult(result);
 
-            ObjectMapper mapper = new ObjectMapper();
+            JsonMapper mapper = new JsonMapper();
             PassDataDTO passData = mapper.readValue(
                     result.getResponse().getContentAsString(),
                     PassDataDTO.class
@@ -148,24 +148,25 @@ public class PassDataControllerV2Test extends BaseControllerMockMvcTest {
                     .andExpect(MockMvcResultMatchers.jsonPath("$.passCategoryList").isArray())
                     .andExpect(MockMvcResultMatchers.jsonPath("$.passCategoryList", Matchers.hasSize(1)))
                     .andExpect(MockMvcResultMatchers.jsonPath("$.passCategoryList[0].categoryName")
-                            .value(passDataDTO.passCategoryList.get(0).categoryName))
+                            .value(passDataDTO.passCategoryList.getFirst().categoryName))
                     .andExpect(MockMvcResultMatchers.jsonPath("$.passCategoryList[0].parentCategory").doesNotExist())
                     .andExpect(MockMvcResultMatchers.jsonPath("$.passNoteList").isArray())
                     .andExpect(MockMvcResultMatchers.jsonPath("$.passNoteList", Matchers.hasSize(1)))
                     .andExpect(MockMvcResultMatchers.jsonPath("$.passNoteList[0].passCategory.categoryName")
-                            .value(passDataDTO.passCategoryList.get(0).categoryName))
+                            .value(passDataDTO.passCategoryList.getFirst().categoryName))
                     .andExpect(MockMvcResultMatchers.jsonPath("$.passNoteList[0].system")
-                            .value(passDataDTO.passNoteList.get(0).system))
+                            .value(passDataDTO.passNoteList.getFirst().system))
                     .andExpect(MockMvcResultMatchers.jsonPath("$.passNoteList[0].user")
-                            .value(passDataDTO.passNoteList.get(0).user))
+                            .value(passDataDTO.passNoteList.getFirst().user))
                     .andExpect(MockMvcResultMatchers.jsonPath("$.passNoteList[0].password")
-                            .value(passDataDTO.passNoteList.get(0).password))
+                            .value(passDataDTO.passNoteList.getFirst().password))
                     .andExpect(MockMvcResultMatchers.jsonPath("$.passNoteList[0].comments")
-                            .value(passDataDTO.passNoteList.get(0).comments))
+                            .value(passDataDTO.passNoteList.getFirst().comments))
                     .andExpect(MockMvcResultMatchers.jsonPath("$.passNoteList[0].custom")
-                            .value(passDataDTO.passNoteList.get(0).custom))
+                            .value(passDataDTO.passNoteList.getFirst().custom))
                     .andExpect(MockMvcResultMatchers.jsonPath("$.passNoteList[0].info")
-                            .value(passDataDTO.passNoteList.get(0).info))
+                            .value(passDataDTO.passNoteList.getFirst().info))
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.noteAttr").doesNotExist())
                     .andReturn()
             );
 
@@ -236,6 +237,7 @@ public class PassDataControllerV2Test extends BaseControllerMockMvcTest {
                             .value("New Custom"))
                     .andExpect(MockMvcResultMatchers.jsonPath("$.passNoteList[0].info")
                             .value("New Info"))
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.noteAttr").doesNotExist())
                     .andReturn()
             );
 

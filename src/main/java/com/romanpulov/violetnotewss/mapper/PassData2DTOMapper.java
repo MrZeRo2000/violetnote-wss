@@ -2,7 +2,6 @@ package com.romanpulov.violetnotewss.mapper;
 
 import com.romanpulov.violetnotecore.Model.PassData2;
 import com.romanpulov.violetnotewss.model.PassData2DTO;
-import org.springframework.stereotype.Component;
 
 import java.util.stream.Collectors;
 

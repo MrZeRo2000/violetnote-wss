@@ -1,17 +1,13 @@
 package com.romanpulov.violetnotewss.services;
 
-import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.core.io.Resource;
 import org.springframework.http.*;
 import org.springframework.http.converter.ByteArrayHttpMessageConverter;
-import org.springframework.http.converter.ResourceHttpMessageConverter;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.Arrays;
 import java.util.Collections;
 
 @Service

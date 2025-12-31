@@ -1,10 +1,10 @@
 package com.romanpulov.violetnotewss;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;
@@ -19,7 +19,7 @@ public class BaseControllerMockMvcTest {
 
     @FunctionalInterface
     public interface ThrowableRunnable {
-        public abstract void run() throws Exception;
+        void run() throws Exception;
     }
 
     protected MockMvc mvc;
@@ -41,7 +41,9 @@ public class BaseControllerMockMvcTest {
         logResult.add("==========================");
     }
 
-    protected ObjectMapper mapper = new ObjectMapper();
+
+    protected JsonMapper mapper = new JsonMapper();
+
     protected String json;
 
     protected final WebApplicationContext context;

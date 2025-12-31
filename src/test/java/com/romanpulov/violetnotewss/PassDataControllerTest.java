@@ -1,7 +1,5 @@
 package com.romanpulov.violetnotewss;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.romanpulov.violetnotewss.model.ErrorResponse;
 import com.romanpulov.violetnotewss.model.PassDataDTO;
 import com.romanpulov.violetnotewss.services.PassDataFileManagementService;
@@ -12,6 +10,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.node.ObjectNode;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
@@ -28,7 +29,7 @@ public class PassDataControllerTest extends BaseApplicationTest {
     public void restPassDataCheckPassword() {
         String url = getBaseUrl() + "/password";
 
-        ObjectMapper mapper = new ObjectMapper();
+        JsonMapper mapper = new JsonMapper();
         ObjectNode passwordNode = mapper.createObjectNode();
         passwordNode.put("password", "pass123");
 
@@ -54,7 +55,7 @@ public class PassDataControllerTest extends BaseApplicationTest {
     public void passData() {
         String url = getBaseUrl();
 
-        ObjectMapper mapper = new ObjectMapper();
+        JsonMapper mapper = new JsonMapper();
         ObjectNode passwordNode = mapper.createObjectNode();
         passwordNode.put("password", "123456");
 
@@ -73,7 +74,7 @@ public class PassDataControllerTest extends BaseApplicationTest {
     public void passDataDropbox() {
         String url = getBaseUrl() + "dropbox";
 
-        ObjectMapper mapper = new ObjectMapper();
+        JsonMapper mapper = new JsonMapper();
         ObjectNode passwordNode = mapper.createObjectNode();
         passwordNode.put("password", "123456");
         passwordNode.put("auth-key", "IC-VZ7nhRZAAAAAAAAAAZTIxapCGU5yAnXt0o4PF1vjycHkNTXfOmrqQktgQil5Y");
@@ -93,7 +94,7 @@ public class PassDataControllerTest extends BaseApplicationTest {
     public void passDataWrongPassword() {
         String url = getBaseUrl();
 
-        ObjectMapper mapper = new ObjectMapper();
+        JsonMapper mapper = new JsonMapper();
         ObjectNode passwordNode = mapper.createObjectNode();
         passwordNode.put("password", "1234567");
 
