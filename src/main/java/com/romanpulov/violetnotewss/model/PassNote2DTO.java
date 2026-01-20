@@ -15,7 +15,7 @@ public class PassNote2DTO {
     public final String info;
     public final Date createdDate;
     public final Date modifiedDate;
-    public final boolean active;
+    public final Boolean active;
 
     @JsonCreator
     public PassNote2DTO(
@@ -34,7 +34,7 @@ public class PassNote2DTO {
             @JsonProperty("modifiedDate")
                     Date modifiedDate,
             @JsonProperty("active")
-                    boolean active
+                    Boolean active
     ) {
         this.system = system;
         this.user = user;

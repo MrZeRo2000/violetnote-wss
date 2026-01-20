@@ -19,7 +19,7 @@ public class PassNoteDTO {
     public final String info;
     public final Date createdDate;
     public final Date modifiedDate;
-    public final boolean active;
+    public final Boolean active;
 
     @JsonIgnore()
     public final Map<String, String> noteAttr = null;
@@ -45,7 +45,7 @@ public class PassNoteDTO {
             @JsonProperty("modifiedDate")
             Date modifiedDate,
             @JsonProperty("active")
-            boolean active
+            Boolean active
     ) {
         this.passCategory = passCategory;
         this.system = system;
