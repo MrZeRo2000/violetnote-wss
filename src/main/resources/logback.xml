@@ -2,5 +2,8 @@
 <configuration>
     <property resource="application.properties"/>
     <property name="LOG_FILE" value="${catalina.home}/logs/violetnote.log"/>
+    <!-- Per-context app name so the %esb(){APPLICATION_NAME} converter doesn't fall back to
+         the JVM-global System property shared by the other WARs in this Tomcat. -->
+    <property scope="context" name="APPLICATION_NAME" value="violetnote-wss"/>
     <include resource="org/springframework/boot/logging/logback/base.xml"/>
 </configuration>
