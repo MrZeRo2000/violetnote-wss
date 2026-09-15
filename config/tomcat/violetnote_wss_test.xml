@@ -1,5 +1,0 @@
-<?xml version='1.0' encoding='utf-8'?>
-<Context>
-	<Parameter name="pass-data-downloaded_file-name" value="test1_downloaded.vnf"/>
-	<Parameter name="pass-data-dropbox_file-name" value="/Temp/test1.vnf"/>
-</Context>
