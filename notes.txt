@@ -1,9 +1,0 @@
-
-Build the application:
-  gradlew build
-
-Run tests:
-  gradlew clean test --info
-
-Build and deploy to local Tomcat:
-  gradlew clean war deployProd

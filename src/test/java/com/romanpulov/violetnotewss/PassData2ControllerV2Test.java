@@ -26,8 +26,8 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class PassData2ControllerV2Test extends BaseControllerMockMvcTest {
 
-    private static final String DATA_FILE_NAME = "data/test1.vnf";
-    private static final String DATA_2_FILE_NAME = "data/test2.vnf";
+    private static final String DATA_FILE_NAME = TestConfiguration.TEST_ROOT_PATH.resolve("test1.vnf").toString();
+    private static final String DATA_2_FILE_NAME = TestConfiguration.TEST_ROOT_PATH.resolve("test2.vnf").toString();
     public static final String DATA_FILE_PASSWORD = "123456";
 
     public PassData2ControllerV2Test(WebApplicationContext context) {

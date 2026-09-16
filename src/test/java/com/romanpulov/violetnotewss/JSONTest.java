@@ -12,7 +12,6 @@ import tools.jackson.databind.node.ObjectNode;
 
 import java.nio.charset.Charset;
 import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -32,7 +31,7 @@ public class JSONTest {
     }
 
     @Test
-    public void serializeCategory() throws Exception {
+    public void serializeCategory() {
         JsonMapper mapper = new JsonMapper();
         PassCategoryDTO passCategory = new PassCategoryDTO("Category 1", null);
         String json = mapper.writeValueAsString(passCategory);
@@ -40,7 +39,7 @@ public class JSONTest {
     }
 
     @Test
-    public void dsCategory() throws Exception {
+    public void dsCategory() {
         String categoryString = "{\"categoryName\":\"Category 1\",\"parentCategory\":null}";
         JsonMapper mapper = new JsonMapper();
 
@@ -50,7 +49,7 @@ public class JSONTest {
 
     @Test
     public void dsPassData() throws Exception {
-        byte[] encodedJson = Files.readAllBytes(Paths.get("data/test1.json"));
+        byte[] encodedJson = Files.readAllBytes(TestConfiguration.TEST_ROOT_PATH.resolve("test1.json"));
         String json = new String(encodedJson, Charset.defaultCharset());
 
         JsonMapper mapper = new JsonMapper();
@@ -76,7 +75,7 @@ public class JSONTest {
     }
 
     @Test
-    public void mixinTest() throws Exception {
+    public void mixinTest() {
 
         TestClass tc = new TestClass();
         tc.x = 7;
@@ -98,7 +97,7 @@ public class JSONTest {
     }
 
     @Test
-    public void missedClassMembers() throws Exception {
+    public void missedClassMembers() {
         String json = "{\"x\":7,\"attrs\":{\"Name1\":\"Value1\"},\"y\":43}";
         JsonMapper objectMapper = new JsonMapper();
         TestMissedClass tc = objectMapper.readValue(json, TestMissedClass.class);

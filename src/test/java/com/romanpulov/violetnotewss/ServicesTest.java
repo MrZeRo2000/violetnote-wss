@@ -6,7 +6,6 @@ import com.romanpulov.violetnotecore.Model.PassData;
 import com.romanpulov.violetnotecore.Model.PassData2;
 import com.romanpulov.violetnotewss.model.PassDataInfo;
 import com.romanpulov.violetnotewss.services.PassData2ManagementService;
-import com.romanpulov.violetnotewss.services.PassDataFileManagementService;
 import com.romanpulov.violetnotewss.exception.PassDataFileNotFoundException;
 import com.romanpulov.violetnotewss.exception.PassDataFileReadException;
 import com.romanpulov.violetnotewss.services.PassDataManagementService;
@@ -26,8 +25,8 @@ import java.io.File;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ContextConfiguration
 public class ServicesTest {
-    private static final String PASS_DATA_FILE_NAME = "data/test1.vnf";
-    private static final String PASS_DATA_2_FILE_NAME = "data/test2.vnf";
+    private static final String PASS_DATA_FILE_NAME = TestConfiguration.TEST_ROOT_PATH.resolve("test1.vnf").toString();
+    private static final String PASS_DATA_2_FILE_NAME = TestConfiguration.TEST_ROOT_PATH.resolve("test2.vnf").toString();
     private static final String PASS_DATA_PASSWORD = "123456";
     private static final String PASS_DATA_WRONG_PASSWORD = "wrong_password";
     private static final String PASS_DATA_WRONG_FILE_NAME = "wrong_file_name";
@@ -52,10 +51,6 @@ public class ServicesTest {
 
     @Autowired
     private PassData2ManagementService passData2ManagementService;
-
-
-    @Autowired
-    private PassDataFileManagementService passDataFileManagementService;
 
     @Test
     public void serviceLoads() {

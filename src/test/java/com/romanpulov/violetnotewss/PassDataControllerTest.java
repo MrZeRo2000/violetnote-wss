@@ -33,7 +33,7 @@ public class PassDataControllerTest extends BaseApplicationTest {
         ObjectNode passwordNode = mapper.createObjectNode();
         passwordNode.put("password", "pass123");
 
-        System.out.println(passwordNode.toString());
+        System.out.println(passwordNode);
 
         // set headers
         HttpHeaders headers = new HttpHeaders();
@@ -46,7 +46,7 @@ public class PassDataControllerTest extends BaseApplicationTest {
 
     @Test
     public void fileName() {
-        assertThat(context.getInitParameter(PassDataFileManagementService.PASS_DATA_FILE_NAME_PARAM_NAME)).isEqualTo("data/test1.vnf");
+        assertThat(context.getInitParameter(PassDataFileManagementService.PASS_DATA_FILE_NAME_PARAM_NAME)).isEqualTo("src/test/resources/testdata/test1.vnf");
         String fileNameResult = this.restTemplate.getForObject(getBaseUrl() + "/filename", String.class);
         assertThat(fileNameResult).contains("file exists:true");
     }
@@ -65,6 +65,7 @@ public class PassDataControllerTest extends BaseApplicationTest {
         HttpEntity<String> entity = new HttpEntity<>(passwordNode.toString(), headers);
         PassDataDTO answer = restTemplate.postForObject(url, entity, PassDataDTO.class);
 
+        assertThat(answer).isNotNull();
         assertThat(answer.passCategoryList.size()).isEqualTo(4);
         assertThat(answer.passNoteList.size()).isEqualTo(7);
     }
@@ -85,6 +86,7 @@ public class PassDataControllerTest extends BaseApplicationTest {
         HttpEntity<String> entity = new HttpEntity<>(passwordNode.toString(), headers);
         PassDataDTO answer = restTemplate.postForObject(url, entity, PassDataDTO.class);
 
+        assertThat(answer).isNotNull();
         assertThat(answer.passCategoryList.size()).isEqualTo(4);
         assertThat(answer.passNoteList.size()).isEqualTo(7);
     }
@@ -104,6 +106,7 @@ public class PassDataControllerTest extends BaseApplicationTest {
         HttpEntity<String> entity = new HttpEntity<>(passwordNode.toString(), headers);
 
         ErrorResponse answer = restTemplate.postForObject(url, entity, ErrorResponse.class);
+        assertThat(answer).isNotNull();
         assertThat(answer.errorCode).isEqualTo(404);
 
         String stringAnswer = restTemplate.postForObject(url, entity, String.class);
