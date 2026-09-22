@@ -8,8 +8,8 @@ import org.springframework.stereotype.Component;
 public class PassCategoryDTOMapper {
     public PassCategory dtoToCore(PassCategoryDTO dto) {
         return new PassCategory(
-                dto.categoryName,
-                dto.parentCategory == null ? null : dtoToCore(dto.parentCategory)
+                dto.categoryName(),
+                dto.parentCategory() == null ? null : dtoToCore(dto.parentCategory())
         );
     }
 }

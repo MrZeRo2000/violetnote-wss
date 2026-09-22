@@ -27,7 +27,7 @@ public class DropboxControllerTest extends BaseApplicationTest  {
         JsonMapper mapper = new JsonMapper();
 
         AuthCode code = mapper.readValue(response.getBody(), AuthCode.class);
-        assertThat(code.getCode()).isEqualTo(testCode);
+        assertThat(code.code()).isEqualTo(testCode);
     }
 
 }

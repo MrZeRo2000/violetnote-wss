@@ -44,7 +44,7 @@ public class JSONTest {
         JsonMapper mapper = new JsonMapper();
 
         PassCategoryDTO category = mapper.readValue(categoryString, PassCategoryDTO.class);
-        assertThat(category.categoryName).isEqualTo("Category 1");
+        assertThat(category.categoryName()).isEqualTo("Category 1");
     }
 
     @Test
@@ -54,8 +54,8 @@ public class JSONTest {
 
         JsonMapper mapper = new JsonMapper();
         PassDataDTO passData = mapper.readValue(json, PassDataDTO.class);
-        assertThat(passData.passCategoryList.size()).isEqualTo(4);
-        assertThat(passData.passNoteList.size()).isEqualTo(7);
+        assertThat(passData.passCategoryList().size()).isEqualTo(4);
+        assertThat(passData.passNoteList().size()).isEqualTo(7);
     }
 
     static abstract class TestMixin {

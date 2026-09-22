@@ -8,8 +8,8 @@ import java.util.stream.Collectors;
 public class PassCategory2DTOMapper {
     public static PassCategory2 dtoToCore(PassCategory2DTO dto) {
         return PassCategory2.createWithNotes(
-                dto.categoryName,
-                dto.passNote2List.stream().map(PassNote2DTOMapper::dtoToCore).collect(Collectors.toList())
+                dto.categoryName(),
+                dto.noteList().stream().map(PassNote2DTOMapper::dtoToCore).collect(Collectors.toList())
         );
     }
 

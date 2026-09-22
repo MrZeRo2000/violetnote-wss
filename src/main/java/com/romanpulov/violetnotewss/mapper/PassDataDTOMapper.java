@@ -19,8 +19,8 @@ public class PassDataDTOMapper {
 
     public PassData dtoToCore(PassDataDTO passDataDTO) {
         return new PassData(
-                passDataDTO.passCategoryList.stream().map(passCategoryDTOMapper::dtoToCore).collect(Collectors.toList()),
-                passDataDTO.passNoteList.stream().map(passNoteDTOMapper::dtoToCore).collect(Collectors.toList())
+                passDataDTO.passCategoryList().stream().map(passCategoryDTOMapper::dtoToCore).collect(Collectors.toList()),
+                passDataDTO.passNoteList().stream().map(passNoteDTOMapper::dtoToCore).collect(Collectors.toList())
         );
     }
 }

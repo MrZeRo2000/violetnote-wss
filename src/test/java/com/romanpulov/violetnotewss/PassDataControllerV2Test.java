@@ -131,8 +131,8 @@ public class PassDataControllerV2Test extends BaseControllerMockMvcTest {
                     PassDataDTO.class
             );
 
-            Assertions.assertEquals(4, passData.passCategoryList.size());
-            Assertions.assertEquals(7, passData.passNoteList.size());
+            Assertions.assertEquals(4, passData.passCategoryList().size());
+            Assertions.assertEquals(7, passData.passNoteList().size());
 
             PassDataDTO passDataDTO = generateTestPassData();
 
@@ -148,24 +148,24 @@ public class PassDataControllerV2Test extends BaseControllerMockMvcTest {
                     .andExpect(MockMvcResultMatchers.jsonPath("$.passCategoryList").isArray())
                     .andExpect(MockMvcResultMatchers.jsonPath("$.passCategoryList", Matchers.hasSize(1)))
                     .andExpect(MockMvcResultMatchers.jsonPath("$.passCategoryList[0].categoryName")
-                            .value(passDataDTO.passCategoryList.getFirst().categoryName))
+                            .value(passDataDTO.passCategoryList().getFirst().categoryName()))
                     .andExpect(MockMvcResultMatchers.jsonPath("$.passCategoryList[0].parentCategory").doesNotExist())
                     .andExpect(MockMvcResultMatchers.jsonPath("$.passNoteList").isArray())
                     .andExpect(MockMvcResultMatchers.jsonPath("$.passNoteList", Matchers.hasSize(1)))
                     .andExpect(MockMvcResultMatchers.jsonPath("$.passNoteList[0].passCategory.categoryName")
-                            .value(passDataDTO.passCategoryList.getFirst().categoryName))
+                            .value(passDataDTO.passCategoryList().getFirst().categoryName()))
                     .andExpect(MockMvcResultMatchers.jsonPath("$.passNoteList[0].system")
-                            .value(passDataDTO.passNoteList.getFirst().system))
+                            .value(passDataDTO.passNoteList().getFirst().system))
                     .andExpect(MockMvcResultMatchers.jsonPath("$.passNoteList[0].user")
-                            .value(passDataDTO.passNoteList.getFirst().user))
+                            .value(passDataDTO.passNoteList().getFirst().user))
                     .andExpect(MockMvcResultMatchers.jsonPath("$.passNoteList[0].password")
-                            .value(passDataDTO.passNoteList.getFirst().password))
+                            .value(passDataDTO.passNoteList().getFirst().password))
                     .andExpect(MockMvcResultMatchers.jsonPath("$.passNoteList[0].comments")
-                            .value(passDataDTO.passNoteList.getFirst().comments))
+                            .value(passDataDTO.passNoteList().getFirst().comments))
                     .andExpect(MockMvcResultMatchers.jsonPath("$.passNoteList[0].custom")
-                            .value(passDataDTO.passNoteList.getFirst().custom))
+                            .value(passDataDTO.passNoteList().getFirst().custom))
                     .andExpect(MockMvcResultMatchers.jsonPath("$.passNoteList[0].info")
-                            .value(passDataDTO.passNoteList.getFirst().info))
+                            .value(passDataDTO.passNoteList().getFirst().info))
                     .andExpect(MockMvcResultMatchers.jsonPath("$.noteAttr").doesNotExist())
                     .andReturn()
             );

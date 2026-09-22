@@ -46,7 +46,7 @@ dependencies {
     providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat-runtime'
 
     implementation 'com.romanpulov:jutils-core:0.5.3'
-    implementation 'com.romanpulov:violetnote-core:2.1.6'
+    implementation 'com.romanpulov:violetnote-core:2.2.0'
 
     // test
     testRuntimeOnly 'org.springframework.boot:spring-boot-starter-tomcat'

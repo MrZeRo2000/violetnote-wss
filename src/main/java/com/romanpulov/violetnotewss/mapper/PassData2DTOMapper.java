@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 public class PassData2DTOMapper {
     public static PassData2 dtoToCore(PassData2DTO dto) {
         return new PassData2(
-                dto.passCategoryList.stream().map(PassCategory2DTOMapper::dtoToCore).collect(Collectors.toList())
+                dto.categoryList().stream().map(PassCategory2DTOMapper::dtoToCore).collect(Collectors.toList())
         );
     }
 

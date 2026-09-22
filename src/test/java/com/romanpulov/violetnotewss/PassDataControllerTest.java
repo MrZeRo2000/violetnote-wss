@@ -66,8 +66,8 @@ public class PassDataControllerTest extends BaseApplicationTest {
         PassDataDTO answer = restTemplate.postForObject(url, entity, PassDataDTO.class);
 
         assertThat(answer).isNotNull();
-        assertThat(answer.passCategoryList.size()).isEqualTo(4);
-        assertThat(answer.passNoteList.size()).isEqualTo(7);
+        assertThat(answer.passCategoryList().size()).isEqualTo(4);
+        assertThat(answer.passNoteList().size()).isEqualTo(7);
     }
 
     @Test
@@ -78,7 +78,7 @@ public class PassDataControllerTest extends BaseApplicationTest {
         JsonMapper mapper = new JsonMapper();
         ObjectNode passwordNode = mapper.createObjectNode();
         passwordNode.put("password", "123456");
-        passwordNode.put("auth-key", "IC-VZ7nhRZAAAAAAAAAAZTIxapCGU5yAnXt0o4PF1vjycHkNTXfOmrqQktgQil5Y");
+        passwordNode.put("auth-name", "IC-VZ7nhRZAAAAAAAAAAZTIxapCGU5yAnXt0o4PF1vjycHkNTXfOmrqQktgQil5Y");
 
         // set headers
         HttpHeaders headers = new HttpHeaders();
@@ -87,8 +87,8 @@ public class PassDataControllerTest extends BaseApplicationTest {
         PassDataDTO answer = restTemplate.postForObject(url, entity, PassDataDTO.class);
 
         assertThat(answer).isNotNull();
-        assertThat(answer.passCategoryList.size()).isEqualTo(4);
-        assertThat(answer.passNoteList.size()).isEqualTo(7);
+        assertThat(answer.passCategoryList().size()).isEqualTo(4);
+        assertThat(answer.passNoteList().size()).isEqualTo(7);
     }
 
 
@@ -107,7 +107,7 @@ public class PassDataControllerTest extends BaseApplicationTest {
 
         ErrorResponse answer = restTemplate.postForObject(url, entity, ErrorResponse.class);
         assertThat(answer).isNotNull();
-        assertThat(answer.errorCode).isEqualTo(404);
+        assertThat(answer.errorCode()).isEqualTo(404);
 
         String stringAnswer = restTemplate.postForObject(url, entity, String.class);
         assertThat(stringAnswer).contains("errorMessage");
